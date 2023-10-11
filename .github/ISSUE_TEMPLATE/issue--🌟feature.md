@@ -2,19 +2,20 @@
 name: "Issue: \U0001F31FFEATURE"
 about: Suggest an idea for this project
 title: ''
-labels: ''
-assignees: ''
+labels: "\U0001F31Ffeature"
+assignees: kny3037
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+📝Description
+-
+작업사항을 입력해주세요
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+✅TODO
+-
+- [ ] todo
+- [ ] todo
+- [ ] todo
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
-
-**Additional context**
-Add any other context or screenshots about the feature request here.
+👣ETC
+-
