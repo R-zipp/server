@@ -1,5 +1,5 @@
 ---
-name: "\U0001F41EBUGFIX"
+name: "Issue: \U0001F41EBUGFIX"
 about: Create a report to help us improve
 title: ''
 labels: ''
