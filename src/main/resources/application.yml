@@ -44,6 +44,30 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  # social login kakao
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          kakao:
+#            client-id: d2d73925c3127795f89cf5dd8ac316b4
+#            client-secret: UXdS2bykGWX9d2kcIxmAbOo5JGX7l6DT
+#            scope: profile_name, account_email, gender, age_range, birthday
+#            client-name: kakao
+#            authorization-grant-type: authorization_code
+#            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+#            client-authentication-method: POST
+#        provider:
+#          kakao:
+#            authorization-uri: https://kauth.kakao.com/oauth/authorize
+#            token-uri: https://kauth.kakao.com/oauth/token
+#            user-info-uri: https://kapi.kakao.com/v2/user/me
+#            user-name-attribute: id
+
+jwt:
+  token:
+    secret: ${JWT_SECRETKEY}
+
 
 logging:
   level:
