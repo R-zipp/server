@@ -16,6 +16,10 @@ public class ARObjectPlacementData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long no;
 
+    private Integer x;  // x 좌표 값
+    private Integer y;  // y 좌표 값
+    private Integer z;  // z 좌표 값
+
     @JoinColumn(name = "arSpaceData_no")
     @ManyToOne(fetch = FetchType.LAZY)
     private ARSpaceData arSpaceData;   // AR 공간 no
