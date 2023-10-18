@@ -21,6 +21,7 @@ public class ObjectInfo {
     private Long no;
 
     private ObjectType objectType;  // 오브젝트 타입
+    private String objectName;  // 오브젝트 이름
     private String objectImage; // 오브젝트 이미지 링크
 
 }
