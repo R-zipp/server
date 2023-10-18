@@ -1,5 +1,6 @@
 package com.mtvs.arzip.configuration.filter;
 
+import com.mtvs.arzip.service.UserService;
 import com.mtvs.arzip.util.JwtTokenUtil;
 import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.JwtException;
@@ -27,6 +28,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
 
+    private final UserService userService;
     private final String secretKey;
 
     @Override
