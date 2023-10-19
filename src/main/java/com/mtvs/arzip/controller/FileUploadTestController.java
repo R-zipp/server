@@ -1,13 +1,11 @@
 package com.mtvs.arzip.controller;
 
 import com.mtvs.arzip.exception.Response;
-import com.mtvs.arzip.service.S3FileUploadTestService;
+import com.mtvs.arzip.service.S3FileTestService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -18,12 +16,19 @@ import java.io.IOException;
 @Api(tags = "파일 업로드")
 public class FileUploadTestController {
 
-    private final S3FileUploadTestService s3FileUploadTestService;
+    private final S3FileTestService s3FileUploadTestService;
 
     @PostMapping
     public Response<String> uploadFile(@RequestPart("file")MultipartFile file) throws IOException {
         String url = s3FileUploadTestService.uploadFile(file);
+
+        System.out.println("url" + url);
         return Response.success(url);
+    }
+
+    @GetMapping("/file_download/{fileName}")
+    public ResponseEntity<byte[]> download(@PathVariable String fileName) throws IOException {
+        return s3FileUploadTestService.getObject(fileName);
     }
 
 }
