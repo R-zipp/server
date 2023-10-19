@@ -68,6 +68,23 @@ jwt:
   token:
     secret: ${JWT_SECRETKEY}
 
+# multipart 설정
+spring.servlet.multipart.max-file-size: 10MB  # default 1MB
+spring.servlet.multipart.max-request-size: 10MB # default 1MB
+
+# aws 설정
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAWZA3EFRCCEPZJQFX
+      secretKey: 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
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    s3:
+      bucket: arzip-bucket
+
 
 logging:
   level:
