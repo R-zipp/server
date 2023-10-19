@@ -76,8 +76,8 @@ spring.servlet.multipart.max-request-size: 10MB # default 1MB
 cloud:
   aws:
     credentials:
-      accessKey: AKIAWZA3EFRCCEPZJQFX
-      secretKey: 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
+      accessKey: ${ACCESSKEY}
+      secretKey: ${SECRETKEY}
     region:
       static: ap-northeast-2
     stack:
