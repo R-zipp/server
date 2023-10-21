@@ -3,10 +3,7 @@ package com.mtvs.arzip.domain.entity;
 import com.mtvs.arzip.domain.enum_class.DrawingType;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -20,7 +17,13 @@ public class AIDrawingData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long no;
 
-    private DrawingType drawingType;  // 3D 도면 타입
+    @Enumerated(EnumType.STRING)
+    private DrawingType drawingType;  // 사용자가 올린 이미지 타입
+
     private String userDrawingImage;  // 사용자가 보낸 도면 이미지 링크
     private String threeDrawingImage; // 3D 도면 이미지 링크
+
+    // @JoinColumn(name = "user_no")
+    //    @ManyToOne(fetch = FetchType.LAZY)
+    //    private User user;  // 도면 이미지 user no 추가(인증/인가 진행 후)
 }

@@ -12,9 +12,11 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/upload")
+// 서버에서 사용 할 때 url : localhost:8080/upload
+// 통신 때 사용 하는 url : IPv4주소:8080/upload
 @RequiredArgsConstructor
-@Api(tags = "파일 업로드")
-public class FileUploadTestController {
+@Api(tags = "파일 업로드, 다운로드 테스트")
+public class S3FileTestController {
 
     private final S3FileTestService s3FileUploadTestService;
 
