@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.util.IOUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import java.net.URLEncoder;
 import java.util.UUID;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class S3FileTestService {
 
@@ -40,20 +42,20 @@ public class S3FileTestService {
         String dirUrl = defaultUrl + dir + "/";
         String fileName = generateFileName(file);
 
-        System.out.println("🏠bucketDir : " + bucketDir);
-        System.out.println("🏠dirUrl : " + dirUrl);
+        log.info("🏠bucketDir : {}", bucketDir);
+        log.info("🏠dirUrl : {}", dirUrl);
 
         amazonS3.putObject(bucketDir, fileName, file.getInputStream(), getObjectMetadata(file));
         return dirUrl + fileName;
     }
 
     public ResponseEntity<byte[]> getObject(String storedFileName) throws IOException {
-        System.out.println("🏠파일 이름 : " + storedFileName);
+        log.info("🏠파일 이름 : {}", storedFileName);
         S3Object s3Object = amazonS3.getObject(new GetObjectRequest(bucketName, downloadDir + storedFileName));
         S3ObjectInputStream s3ObjectInputStream = ((S3Object) s3Object).getObjectContent();
         byte[] bytes = IOUtils.toByteArray(s3ObjectInputStream);
 
-        System.out.println("🏠byte : " + bytes);
+        log.info("🏠byte : {}", bytes);
 
         String fileName = URLEncoder.encode(storedFileName, "UTF-8").replaceAll("\\+", "%20");
         HttpHeaders httpHeaders = new HttpHeaders();
