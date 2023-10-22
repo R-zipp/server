@@ -19,7 +19,7 @@ public class ARObjectPlacementData {
     private Integer x;  // x 좌표 값
     private Integer y;  // y 좌표 값
     private Integer z;  // z 좌표 값
-    // 오브젝트 회전 값
+    private Integer rotation; // 오브젝트 회전 값
 
     @JoinColumn(name = "arSpaceData_no")
     @ManyToOne(fetch = FetchType.LAZY)
