@@ -67,7 +67,7 @@ public class AiDrawingService {
         WebClient webClient = WebClient.create();
 
         // AI 요청 URL
-        String aiUrl = "";
+        String aiUrl = "http://";
 
         webClient.post()
                 .uri(aiUrl)
