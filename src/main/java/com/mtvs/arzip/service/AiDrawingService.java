@@ -46,7 +46,7 @@ public class AiDrawingService {
 
         // AiDrawingDataDto를 엔티티로 변환
         AIDrawingData aiDrawingData = AiDrawingDataUnrealDto.toEntity(aiDrawingDataUnrealDto);
-        log.info("🏠AiDrawingDataUnrealDto를 entity로 변환한 값 : {}", aiDrawingData);
+        log.info("🏠AiDrawingDataUnrealDto를 entity로 변환한 값 : {}", aiDrawingData.getNo());
 
         // AiDrawingData 엔티티를 저장
         aiDrawingRepository.save(aiDrawingData);
@@ -57,17 +57,19 @@ public class AiDrawingService {
         log.info("🏠AI로 전송 시작");
         sendDrawingDataToAI(aiDrawingDataUnrealDto);
 
+
+
     }
 
     // 사용자가 올린 도면 이미지 db ai로 전송
     private void sendDrawingDataToAI(AiDrawingDataUnrealDto aiDrawingDataUnrealDto) {
-
+        //DTO 분리
         log.info("🏠AI로 데이터 전송 서비스 코드 시작");
 
         WebClient webClient = WebClient.create();
 
         // AI 요청 URL
-        String aiUrl = "http://";
+        String aiUrl = "https://920c-221-163-19-218.ngrok-free.app/test_api/in_json_out_json";
 
         webClient.post()
                 .uri(aiUrl)
@@ -94,34 +96,47 @@ public class AiDrawingService {
 
         log.info("🏠webClient : {}", webClient);
 
+
+
     }
 
     // ai에서 보낸 도면 데이터 저장
+    @Transactional
     public AIDrawingDataDto aiUploadFile(MultipartFile file, AiDrawingDataAIDto aiDrawingDataAIDto, Long no) throws IOException {
 
         log.info("🏠서비스 코드 시작");
 
         AIDrawingData aiDrawingData = aiDrawingRepository.findById(no)
                 .orElseThrow(() -> new AppException(ErrorCode.IMAGE_NOT_FOUND));
+        log.info("🏠aiDrawingData : {}", aiDrawingData.getNo());
+
 
         // 이미지 파일을 S3에 업로드 (이미지 저장 코드)
         String s3FbxUrl = s3Service.uploadFile(file);
         log.info("🏠AI가 전송한 이미지 S3 url: {}", s3FbxUrl);
 
-        aiDrawingDataAIDto.setAiDrawingImage(s3FbxUrl);
+        aiDrawingDataAIDto.setFbxFile(s3FbxUrl);
+
+        AIDrawingData saved = AIDrawingData.builder()
+                .no(aiDrawingData.getNo())
+                .userDrawingImage(aiDrawingData.getUserDrawingImage())
+                .drawingType(aiDrawingData.getDrawingType())
+                .fbxFile(aiDrawingDataAIDto.getFbxFile())
+                .build();
 
         // AiDrawingDataDto를 엔티티로 변환
         aiDrawingData = AiDrawingDataAIDto.toEntity(aiDrawingDataAIDto);
-        log.info("🏠aiDrawingDataAIDto를 entity로 변환한 값 : {}", aiDrawingData);
+        log.info("🏠aiDrawingDataAIDto를 entity로 변환한 값 : {}", aiDrawingData.getNo());
 
         aiDrawingData.modify(s3FbxUrl);
 
         // AiDrawingData 엔티티를 저장
-        AIDrawingData savedAiDrawingData = aiDrawingRepository.save(aiDrawingData);
-        log.info("🏠savedAiDrawingData: {}", savedAiDrawingData);
+        AIDrawingData savedAiDrawingData = aiDrawingRepository.save(saved);
+        //log.info("🏠savedAiDrawingData: {}", savedAiDrawingData.getNo());
         log.info("🏠저장 완료");
 
         return AIDrawingDataDto.of(savedAiDrawingData);
+//        return AIDrawingDataDto.of(aiDrawingData);
     }
 
     // fbx 파일 다운로드 후 unreal로 전송

@@ -37,7 +37,7 @@ public class AiDrawingController {
     }
 
     // AI가 올린 fbx 파일 정보 저장
-    @PostMapping(value = "/ai-upload/{no}")
+    @PutMapping(value = "/ai-upload/{no}")
     public Response<?> aiUploadData(@PathVariable Long no, @RequestPart("file") MultipartFile file, @RequestPart AiDrawingDataAIDto aiDrawingDataAIDto) {
         try {
             aiDrawingService.aiUploadFile(file, aiDrawingDataAIDto, no);
@@ -61,8 +61,6 @@ public class AiDrawingController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
-
 
 
 

@@ -17,14 +17,14 @@ public class AIDrawingDataDto {
     @Enumerated(EnumType.STRING)
     private DrawingType drawingType;
     private String userDrawingImage;
-    private String aiDrawingImage;
+    private String fbxFile;
 
     public static AIDrawingDataDto of (AIDrawingData aiDrawingData) {
         return AIDrawingDataDto.builder()
                 .no(aiDrawingData.getNo())
                 .drawingType(aiDrawingData.getDrawingType())
-                .userDrawingImage(aiDrawingData.getAiDrawingImage())
-                .aiDrawingImage(aiDrawingData.getAiDrawingImage())
+                .userDrawingImage(aiDrawingData.getUserDrawingImage())
+                .fbxFile(aiDrawingData.getFbxFile())
                 .build();
     }
 }
