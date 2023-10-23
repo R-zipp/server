@@ -69,7 +69,7 @@ public class AiDrawingService {
         WebClient webClient = WebClient.create();
 
         // AI 요청 URL
-        String aiUrl = "https://920c-221-163-19-218.ngrok-free.app/test_api/in_json_out_json";
+        String aiUrl = "";
 
         webClient.post()
                 .uri(aiUrl)
