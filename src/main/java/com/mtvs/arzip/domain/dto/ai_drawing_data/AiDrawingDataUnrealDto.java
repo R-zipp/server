@@ -11,13 +11,11 @@ import lombok.*;
 @AllArgsConstructor
 public class AiDrawingDataUnrealDto {
 
-    private Long no;
     private String drawingType;
     private String userDrawingImage;
 
     public static AIDrawingData toEntity(AiDrawingDataUnrealDto dto) {
         return AIDrawingData.builder()
-                .no(dto.getNo())
                 .drawingType(DrawingType.valueOf(dto.getDrawingType()))
                 .userDrawingImage(dto.getUserDrawingImage())
                 .build();

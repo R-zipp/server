@@ -11,11 +11,11 @@ import lombok.*;
 @AllArgsConstructor
 public class AiDrawingDataAIDto {
 
-    private String aiDrawingImage;
+    private String fbxFile;
 
     public static AIDrawingData toEntity(AiDrawingDataAIDto dto) {
         return AIDrawingData.builder()
-                .aiDrawingImage(dto.aiDrawingImage)
+                .fbxFile(dto.fbxFile)
                 .build();
     }
 
