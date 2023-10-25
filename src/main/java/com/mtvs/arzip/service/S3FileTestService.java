@@ -14,9 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.UUID;
 
@@ -36,16 +38,19 @@ public class S3FileTestService {
 
     private String defaultUrl = "https://arzip-bucket.s3.ap-northeast-2.amazonaws.com";
 
-    public String uploadFile(MultipartFile file) throws IOException {
+    public String uploadFile(InputStream stream,  String contentType, String etc) throws IOException {
 
         String bucketDir = bucketName + dir;
         String dirUrl = defaultUrl + dir + "/";
-        String fileName = generateFileName(file);
+        String fileName = generateFileName() + etc;
 
         log.info("🏠bucketDir : {}", bucketDir);
         log.info("🏠dirUrl : {}", dirUrl);
 
-        amazonS3.putObject(bucketDir, fileName, file.getInputStream(), getObjectMetadata(file));
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentType(contentType);
+
+        amazonS3.putObject(bucketDir, fileName, stream, objectMetadata);
         return dirUrl + fileName;
     }
 
@@ -67,16 +72,17 @@ public class S3FileTestService {
     }
 
 
-    private ObjectMetadata getObjectMetadata(MultipartFile file) {
+    private ObjectMetadata getObjectMetadata(InputStream fileStream, String contentType, long size) {
         ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentType(file.getContentType());
-        objectMetadata.setContentLength(file.getSize());
+        objectMetadata.setContentType(contentType);
+        objectMetadata.setContentLength(size);
         return objectMetadata;
     }
 
-    private String generateFileName(MultipartFile file) {
-        return UUID.randomUUID().toString() + "-" + file.getOriginalFilename();
+    private String generateFileName() {
+        return UUID.randomUUID().toString();
     }
+
 
 
 }

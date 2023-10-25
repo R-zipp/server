@@ -9,14 +9,14 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AiDrawingDataUnrealDto {
+public class AiDrawingDataHandingRequest {
 
     private String drawingType;
     private String userDrawingImage;
 
-    public static AIDrawingData toEntity(AiDrawingDataUnrealDto dto) {
+    public static AIDrawingData toEntity(AiDrawingDataHandingRequest dto) {
         return AIDrawingData.builder()
-                .drawingType(DrawingType.valueOf(dto.getDrawingType()))
+                .drawingType(DrawingType.HANDIMG)
                 .userDrawingImage(dto.getUserDrawingImage())
                 .build();
     }
