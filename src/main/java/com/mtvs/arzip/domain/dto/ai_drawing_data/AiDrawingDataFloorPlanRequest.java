@@ -9,15 +9,15 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AiDrawingDataAIDto {
+public class AiDrawingDataFloorPlanRequest {
 
-    private String fbxFile;
+    private String drawingType;
+    private String userDrawingImage;
 
-    public static AIDrawingData toEntity(AiDrawingDataAIDto dto) {
+    public static AIDrawingData toEntity(AiDrawingDataFloorPlanRequest dto) {
         return AIDrawingData.builder()
-                .fbxFile(dto.fbxFile)
+                .drawingType(DrawingType.FLOORPLAN)
+                .userDrawingImage(dto.getUserDrawingImage())
                 .build();
     }
-
-
 }
