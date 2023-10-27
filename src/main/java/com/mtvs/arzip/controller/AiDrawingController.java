@@ -9,6 +9,7 @@ import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,44 +43,12 @@ public class AiDrawingController {
 
         try {
             String result = aiDrawingService.userUploadFloorPlan(stream, request, etc, contentType);
-            System.out.println("언리얼이 받는 문자열: " + Response.success(result));
+            System.out.println("🏠Unreal이 받는 문자열: " + Response.success(result).getMessage());
             return Response.success(result).getMessage();
         } catch (IOException e) {
             return Response.error("이미지 처리 중 오류가 발생했습니다: " + e.getMessage()).getMessage();
         }
     }
-
-
-    // AI가 올린 fbx 파일 정보 저장
-    // fbx 파일 다운로드 후 Unreal로 전송
-//    @PutMapping(value = "/ai-upload/{no}", consumes = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
-//    public Response<?> aiUploadData(@PathVariable Long no, InputStream stream, @RequestPart AiDrawingDataAIRequest request,
-//                                    @RequestHeader("Content-Type")String contentType) {
-//
-//        String etc = ".fbx";
-//
-//        try {
-//            aiDrawingService.aiUploadFile(stream, request, no, etc, contentType);
-//            return Response.success("fbx 파일이 성공적으로 처리 및 저장되었습니다.");
-//        } catch (IOException e) {
-//            return Response.error("fbx 파일 처리 중 오류가 발생했습니다." + e.getMessage());
-//        }
-//    }
-
-
-//    @GetMapping("/{filename}")
-//    public ResponseEntity<byte[]> downloadFile(@PathVariable String filename) {
-//        try {
-//            byte[] fileResource = aiDrawingService.downloadFBXFileAsBytes(filename).getBody();
-//            HttpHeaders httpHeaders = aiDrawingService.createFileDownloadHeader(filename, fileResource);
-//            return ResponseEntity.ok()
-//                    .headers(httpHeaders)
-//                    .body(fileResource);
-//        } catch (IOException e) {
-//            // 예외 처리
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-//        }
-//    }
 
 
     private String getfileExtension(String contentType) {
