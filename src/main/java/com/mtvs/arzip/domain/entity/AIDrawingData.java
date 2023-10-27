@@ -1,5 +1,6 @@
 package com.mtvs.arzip.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mtvs.arzip.domain.enum_class.DrawingType;
 import lombok.*;
 
@@ -21,6 +22,8 @@ public class AIDrawingData {
     private DrawingType drawingType;  // 사용자가 올린 이미지 타입
 
     private String userDrawingImage;  // 사용자가 보낸 도면 이미지 링크
+
+    @JsonProperty("URL") // JSON 키를 "URL"로 명시적으로 매핑
     private String fbxFile; // 3D 도면 이미지 링크
 
     // @JoinColumn(name = "user_no")
@@ -29,6 +32,10 @@ public class AIDrawingData {
 
     // AI fbx 파일 url 추가
     public void modify(String fbxFile) {
+        this.fbxFile = fbxFile;
+    }
+
+    public void updateFbxFile(String fbxFile) {
         this.fbxFile = fbxFile;
     }
 }

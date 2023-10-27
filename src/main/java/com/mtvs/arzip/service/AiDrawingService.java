@@ -2,29 +2,24 @@ package com.mtvs.arzip.service;
 
 import com.amazonaws.util.IOUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mtvs.arzip.domain.dto.ai_drawing_data.AIDrawingDataDto;
 import com.mtvs.arzip.domain.dto.ai_drawing_data.AiDrawingDataAIRequest;
 import com.mtvs.arzip.domain.dto.ai_drawing_data.AiDrawingDataFloorPlanRequest;
 import com.mtvs.arzip.domain.dto.ai_drawing_data.AiDrawingDataResponse;
+import com.mtvs.arzip.domain.dto.ai_drawing_data.AiResponse;
 import com.mtvs.arzip.domain.entity.AIDrawingData;
-import com.mtvs.arzip.exception.AppException;
-import com.mtvs.arzip.exception.ErrorCode;
 import com.mtvs.arzip.repository.AiDrawingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.*;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Base64;
 
 @Service
@@ -37,9 +32,9 @@ public class AiDrawingService {
     private final ObjectMapper objectMapper;
 
 
-   // 유저가 올린 도면 이미지 타입, url 저장
+    // 유저가 올린 도면 이미지 타입, url 저장
     @Transactional
-    public void userUploadFloorPlan(InputStream stream, AiDrawingDataFloorPlanRequest request, String etc, String contentType) throws IOException {
+        public String userUploadFloorPlan(InputStream stream, AiDrawingDataFloorPlanRequest request, String etc, String contentType) throws IOException {
 
         log.info("🏠AiDrawing 서비스 코드 시작");
 
@@ -79,132 +74,65 @@ public class AiDrawingService {
         log.info("🏠aiDrawingData: {}", aiDrawingData);
         log.info("🏠저장 완료");
 
-//        log.info("🏠AI로 전송 시작");
-//        sendDrawingDataToAI(aiDrawingDataFloorPlanDto);
+        // AiDrawingDataResponse 객체 생성
+        AiDrawingDataResponse aiDrawingDataResponse = new AiDrawingDataResponse();
+        aiDrawingDataResponse.setUserDrawingImage(s3ImageUrl);
+        aiDrawingDataResponse.setDrawingType(aiDrawingData.getDrawingType().name());
 
+        // AiDrawingDataAIRequest 객체 생성
+        AiDrawingDataAIRequest aiDrawingDataAIRequest = new AiDrawingDataAIRequest();
+
+        log.info("🏠AI로 전송 시작");
+        AiDrawingDataResponse result = sendDrawingDataToAI(aiDrawingDataResponse, aiDrawingDataAIRequest);
+
+        // AI 서버로부터 받은 FBX 파일의 S3 URL을 AiDrawingData 엔티티에 저장
+        aiDrawingData.updateFbxFile(result.getFbxFile());
+
+        // entity 저장
+        aiDrawingRepository.save(aiDrawingData);
+        log.info("🏠FBX 파일 URL 저장 완료");
+
+        return result.getFbxFile();
     }
 
 
     // 사용자가 올린 도면 이미지 db ai로 전송
-    private void sendDrawingDataToAI(AiDrawingDataResponse aiDrawingDataResponse) {
-        //DTO 분리()
+    private AiDrawingDataResponse sendDrawingDataToAI(AiDrawingDataResponse aiDrawingDataResponse, AiDrawingDataAIRequest request) throws IOException {
         log.info("🏠AI로 데이터 전송 서비스 코드 시작");
 
-        WebClient webClient = WebClient.create();
+        WebClient webClient = WebClient.builder().baseUrl("https://f60e-210-99-35-45.ngrok-free.app").build();
 
-        // AI 요청 URL
-        String aiUrl = "";
-
-        webClient.post()
-                .uri(aiUrl)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(aiDrawingDataResponse))
-                .exchange()
-                .subscribe(
-                        result -> {
-                            if (result.statusCode().is2xxSuccessful()) {
-                                log.info("🏠AI 서비스와 통신 성공");
-                                System.out.println(result);
-//                                 aiUploadFile(result.)
-                            } else {
-                                log.error("🏠AI 서비스 응답 오류: " + result.statusCode());
-                            }
-                        },
-                        error -> {
-                            if (error instanceof AppException) {
-                                AppException appException = (AppException) error;
-                                log.error("🏠AI 서비스 오류: " + appException.getErrorCode().getMessage());
-                            } else {
-                                log.error("🏠알 수 없는 오류 발생: " + error.getMessage());
-                            }
-                        }
-                );
-
-        log.info("🏠webClient : {}", webClient);
-    }
-
-
-    // ai에서 보낸 도면 데이터 저장
-    @Transactional
-    public AIDrawingDataDto aiUploadFile(InputStream stream, AiDrawingDataAIRequest request, Long no, String etc, String contentType) throws IOException {
-        // 파일을 ai에게
-        // 파일을 받으면 s3에 서버가 업로드
-        log.info("🏠서비스 코드 시작");
-
-        AIDrawingData aiDrawingData = aiDrawingRepository.findById(no)
-                .orElseThrow(() -> new AppException(ErrorCode.IMAGE_NOT_FOUND));
-        log.info("🏠aiDrawingData : {}", aiDrawingData.getNo());
-
-        byte[] bytes = IOUtils.toByteArray(stream);
-
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
-        BufferedImage bufferedImage = ImageIO.read(inputStream);
-        log.info("🏠bufferedImage: {}", bufferedImage);
-
-
-        ByteArrayInputStream inputStreamForUpload = new ByteArrayInputStream(bytes);
-
-        // 이미지 파일을 S3에 업로드 (이미지 저장 코드)
-        String s3FbxUrl = s3Service.uploadFile(inputStreamForUpload, contentType, etc);
-        log.info("🏠AI가 전송한 이미지 S3 url: {}", s3FbxUrl);
-
-        request.setFbxFile(s3FbxUrl);
-
-        AIDrawingData saved = AIDrawingData.builder()
-                .no(aiDrawingData.getNo())
-                .userDrawingImage(aiDrawingData.getUserDrawingImage())
-                .drawingType(aiDrawingData.getDrawingType())
-                .fbxFile(request.getFbxFile())
-                .build();
-
-        // AiDrawingDataDto를 엔티티로 변환
-        aiDrawingData = AiDrawingDataAIRequest.toEntity(request);
-        log.info("🏠aiDrawingDataAIDto를 entity로 변환한 값 : {}", aiDrawingData.getNo());
-
-        aiDrawingData.modify(s3FbxUrl);
-
-        // AiDrawingData 엔티티를 저장
-        AIDrawingData savedAiDrawingData = aiDrawingRepository.save(saved);
-        //log.info("🏠savedAiDrawingData: {}", savedAiDrawingData.getNo());
-        log.info("🏠저장 완료");
-
-        return AIDrawingDataDto.of(savedAiDrawingData);
-//        return AIDrawingDataDto.of(aiDrawingData);
-    }
-
-
-    // fbx 파일 다운로드 후 unreal로 전송
-    public ResponseEntity<byte[]> downloadFBXFileAsBytes(String filename) {
         try {
-            // S3에서 파일 다운
-            ResponseEntity<byte[]> responseEntity = s3Service.getObject(filename);
-            byte[] fileData = responseEntity.getBody();
-            log.info("🏠fileData : {}", fileData);
+            // AI 서버로부터 S3 URL을 받아옴
+            AiResponse aiResponse = webClient.post()
+                    .uri("/spring/img_to_fbx_S3")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(BodyInserters.fromValue(aiDrawingDataResponse))
+                    .retrieve()
+                    .bodyToMono(AiResponse.class)
+                    .block();
 
-            // HttpHeaders를 설정하여 파일 다운로드 응답을 생성
-            HttpHeaders httpHeaders = createFileDownloadHeader(filename, fileData);
+            String URL = aiResponse.getURL();
 
-            return new ResponseEntity<>(fileData, httpHeaders, HttpStatus.OK);
-        } catch (IOException e) {
-            // 파일을 읽어오는 중 오류가 발생하면 예외 처리
-            throw new RuntimeException("🏠파일 다운로드 중 오류 발생", e);
+            log.info("🏠AI와 통신 성공");
+            log.info("🏠AI로부터 받은 S3 URL : " + aiResponse);
+
+            // s3 URL 저장
+            request.setFbxFile(URL);
+
+            // AiDrawingDataResponse 객체 생성 후 반환
+            AiDrawingDataResponse response = new AiDrawingDataResponse();
+            response.setFbxFile(URL);
+
+            return response;
+
+        } catch(WebClientResponseException e) {
+            log.error("🏠AI와 통신 실패", e);
+            log.error("🏠오류 상태 코드 : " + e.getRawStatusCode());
+            log.error("🏠오류 메시지 : " + e.getResponseBodyAsString());
+            throw new RuntimeException("🏠AI와 통신 실패(응답 오류)", e);
         }
     }
-
-
-    // 파일 다운로드
-    public HttpHeaders createFileDownloadHeader(String filename, byte[] fileData) throws UnsupportedEncodingException {
-        String encodedFileName = URLEncoder.encode(filename, "UTF-8").replaceAll("\\+", "%20");
-        log.info("🏠encodedFileName : {}", encodedFileName);
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        httpHeaders.setContentLength(fileData.length);
-        httpHeaders.setContentDispositionFormData("attachment", encodedFileName);
-
-        return httpHeaders;
-    }
-
 
     private AiDrawingDataFloorPlanRequest parseJsonData(String jsonImageData) {
         try {
@@ -214,5 +142,7 @@ public class AiDrawingService {
             throw new RuntimeException("🏠JSON 데이터 파싱 중 오류 발생", e);
         }
     }
+
+
 
 }
