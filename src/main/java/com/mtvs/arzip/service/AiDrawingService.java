@@ -9,6 +9,8 @@ import com.mtvs.arzip.domain.dto.ai_drawing_data.AiDrawingDataFloorPlanRequest;
 import com.mtvs.arzip.domain.dto.ai_drawing_data.AiDrawingDataResponse;
 import com.mtvs.arzip.domain.dto.ai_drawing_data.AiResponse;
 import com.mtvs.arzip.domain.entity.AIDrawingData;
+import com.mtvs.arzip.exception.AppException;
+import com.mtvs.arzip.exception.ErrorCode;
 import com.mtvs.arzip.repository.AiDrawingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -133,7 +135,7 @@ public class AiDrawingService {
             log.error("🏠AI와 통신 실패", e);
             log.error("🏠오류 상태 코드 : " + e.getRawStatusCode());
             log.error("🏠오류 메시지 : " + e.getResponseBodyAsString());
-            throw new RuntimeException("🏠AI와 통신 실패(응답 오류)", e);
+            throw new AppException(ErrorCode.AI_SERVICE_ERROR);
         }
     }
 
@@ -142,7 +144,7 @@ public class AiDrawingService {
             return objectMapper.readValue(jsonImageData, AiDrawingDataFloorPlanRequest.class);
         } catch (IOException e) {
             // 예외 처리
-            throw new RuntimeException("🏠JSON 데이터 파싱 중 오류 발생", e);
+            throw new AppException(ErrorCode.JSON_DATA_PARSING_ERROR);
         }
     }
 
