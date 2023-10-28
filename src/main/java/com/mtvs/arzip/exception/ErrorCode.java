@@ -17,6 +17,10 @@ public enum ErrorCode {
     JSON_DATA_PARSING_ERROR(HttpStatus.BAD_REQUEST, "Json 데이터 파싱 중 오류가 발생했습니다."),
     AI_SERVICE_ERROR(HttpStatus.BAD_REQUEST,"AI 서비스 응답 오류"),
     IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자가 올린 도면 이미지를 찾을 수 없습니다."),
+    OBJECT_NOT_FOUND(HttpStatus.NOT_FOUND,"추가 데이터를 저장할 오브젝트 파일이 없습니다."),
+    INVALID_FILE_EXTENSION(HttpStatus.BAD_REQUEST, "지원하지 않는 파일 확장자입니다."),
+    ;
+
 
 
 

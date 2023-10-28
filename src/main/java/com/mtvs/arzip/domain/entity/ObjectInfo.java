@@ -24,4 +24,11 @@ public class ObjectInfo {
     private String objectName;  // 오브젝트 이름
     private String objectImage; // 오브젝트 이미지 링크
 
+    public void update(String objectName, ObjectType objectType) {
+
+        this.objectName = objectName;
+        this.objectType = objectType;
+
+    }
+
 }
