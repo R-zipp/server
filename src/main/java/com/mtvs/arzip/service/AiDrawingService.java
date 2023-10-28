@@ -2,6 +2,8 @@ package com.mtvs.arzip.service;
 
 import com.amazonaws.util.IOUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.mtvs.arzip.domain.dto.ai_drawing_data.AiDrawingDataAIRequest;
 import com.mtvs.arzip.domain.dto.ai_drawing_data.AiDrawingDataFloorPlanRequest;
 import com.mtvs.arzip.domain.dto.ai_drawing_data.AiDrawingDataResponse;
@@ -112,7 +114,8 @@ public class AiDrawingService {
                     .bodyToMono(AiResponse.class)
                     .block();
 
-            String URL = aiResponse.getURL();
+            String jsonString = aiResponse.getURL(); // AI 서버로부터 받아온 JSON 문자열
+            String URL = JsonParser.parseString(jsonString).getAsJsonObject().get("URL").getAsString(); // "URL" 키에 해당하는 값 바로 추출
 
             log.info("🏠AI와 통신 성공");
             log.info("🏠AI로부터 받은 S3 URL : " + aiResponse);
