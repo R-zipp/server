@@ -32,6 +32,8 @@ public class S3FileTestService {
 
     private String dir = "/test1";
 
+    private String objDir = "/object";
+
     private String downloadDir = "test1/";
 
     private String defaultUrl = "https://arzip-bucket.s3.ap-northeast-2.amazonaws.com";
@@ -40,6 +42,22 @@ public class S3FileTestService {
 
         String bucketDir = bucketName + dir;
         String dirUrl = defaultUrl + dir + "/";
+        String fileName = generateFileName() + etc;
+
+        log.info("🏠bucketDir : {}", bucketDir);
+        log.info("🏠dirUrl : {}", dirUrl);
+
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentType(contentType);
+
+        amazonS3.putObject(bucketDir, fileName, stream, objectMetadata);
+        return dirUrl + fileName;
+    }
+
+    public String objectUpload(InputStream stream,  String contentType, String etc) throws IOException {
+
+        String bucketDir = bucketName + objDir;
+        String dirUrl = defaultUrl + objDir + "/";
         String fileName = generateFileName() + etc;
 
         log.info("🏠bucketDir : {}", bucketDir);
