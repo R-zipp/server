@@ -1,8 +1,7 @@
 package com.mtvs.arzip.configuration;
 
-import com.mtvs.arzip.configuration.filter.JwtTokenFilter;
+import com.mtvs.arzip.jwt.TokenProvider;
 import com.mtvs.arzip.service.UserService;
-import com.mtvs.arzip.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +10,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -19,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final UserService userService;
+    private final TokenProvider tokenProvider;
     @Value("${jwt.token.secret}")
     private String secretKey;
 
@@ -37,7 +36,8 @@ public class SecurityConfig {
                 .exceptionHandling()
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 .and()
-                .addFilterBefore(new JwtTokenFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class)
+                .apply(new JwtSecurityConfig(tokenProvider))
+                .and()
                 .build();
 
 

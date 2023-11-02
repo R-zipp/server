@@ -44,7 +44,7 @@ public class UserJoinRequest {
                 .height(this.height)
                 .weight(this.weight)
                 .nickname(this.nickname)
-                .role(UserRole.USER)
+                .role(UserRole.ROLE_USER)
                 .build();
     }
 

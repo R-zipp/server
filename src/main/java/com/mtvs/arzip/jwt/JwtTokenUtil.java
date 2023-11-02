@@ -1,16 +1,13 @@
-package com.mtvs.arzip.util;
+package com.mtvs.arzip.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.SecretKey;
 import java.time.Duration;
-import java.util.Base64;
 import java.util.Date;
 
 @Slf4j
