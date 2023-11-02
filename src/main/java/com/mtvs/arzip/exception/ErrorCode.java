@@ -19,6 +19,10 @@ public enum ErrorCode {
     IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자가 올린 도면 이미지를 찾을 수 없습니다."),
     OBJECT_NOT_FOUND(HttpStatus.NOT_FOUND,"추가 데이터를 저장할 오브젝트 파일이 없습니다."),
     INVALID_FILE_EXTENSION(HttpStatus.BAD_REQUEST, "지원하지 않는 파일 확장자입니다."),
+    INVALID_REFRESH_TOKEN(HttpStatus.NOT_FOUND, "Refresh Token이 유효하지 않습니다."),
+    LOGOUT_USER(HttpStatus.NOT_FOUND, "로그아웃 된 사용자입니다."),
+    TOKEN_NOT_MATCH(HttpStatus.UNAUTHORIZED,"토큰의 유저 정보가 일치하지 않습니다"),
+
     ;
 
 

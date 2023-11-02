@@ -1,6 +1,11 @@
 package com.mtvs.arzip.controller;
 
-import com.mtvs.arzip.domain.dto.user.*;
+import com.mtvs.arzip.domain.dto.token.TokenDto;
+import com.mtvs.arzip.domain.dto.token.TokenRequestDto;
+import com.mtvs.arzip.domain.dto.user.UserDto;
+import com.mtvs.arzip.domain.dto.user.UserJoinRequest;
+import com.mtvs.arzip.domain.dto.user.UserJoinResponse;
+import com.mtvs.arzip.domain.dto.user.UserLoginRequest;
 import com.mtvs.arzip.exception.Response;
 import com.mtvs.arzip.service.UserService;
 import io.swagger.annotations.Api;
@@ -25,8 +30,12 @@ public class UserRestController {
     }
 
     @PostMapping("/login")
-    public Response<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest) {
-        String token = userService.login(userLoginRequest);
-        return Response.success(new UserLoginResponse(token));
+    public Response<TokenDto> login(@RequestBody UserLoginRequest userLoginRequest) {
+        return Response.success(userService.login(userLoginRequest));
+    }
+
+    @PostMapping("/reissue")
+    public Response<TokenDto> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
+        return Response.success(userService.reissue(tokenRequestDto));
     }
 }
