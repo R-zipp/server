@@ -17,12 +17,10 @@ public class User extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long no;
 
-    private String id;
+    private String email;
     private String password;
 
     private String name;        // 이름
-    private Integer age;        // 나이
-    private String gender;      // 성별
     private Integer height;     // 키
     private Integer weight;     // 몸무게
     private String nickname;    // 닉네임
@@ -36,4 +34,14 @@ public class User extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "character_no")
     private UserCharacter characterNo;  // 유저가 선택한 캐릭터 No
+
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
+    }
+
+    public void updateUser(String password, Integer height, Integer weight) {
+        this.password = password;
+        this.height = height;
+        this.weight = weight;
+    }
 }
