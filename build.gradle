@@ -59,6 +59,12 @@ dependencies {
 
 	// json
 	implementation 'com.google.code.gson:gson:2.8.8'
+
+	// redis로 인증 번호 유효 시간 저장
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	// email 인증
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 }
 
 tasks.named('test') {

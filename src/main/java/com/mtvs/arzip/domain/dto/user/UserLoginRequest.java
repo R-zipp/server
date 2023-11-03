@@ -12,18 +12,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @AllArgsConstructor
 public class UserLoginRequest {
 
-    private String id;
+    private String email;
     private String password;
 
     public User user(PasswordEncoder passwordEncoder) {
         return User.builder()
-                .id(id)
+                .email(email)
                 .password(passwordEncoder.encode(password))
                 .role(UserRole.ROLE_USER)
                 .build();
     }
 
     public UsernamePasswordAuthenticationToken authenticationToken() {
-        return new UsernamePasswordAuthenticationToken(id, password);
+        return new UsernamePasswordAuthenticationToken(email, password);
     }
 }

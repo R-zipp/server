@@ -11,10 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserJoinResponse {
 
-    private String id;
+    private String email;
     private String name;
-    private Integer age;
-    private String gender;
     private Integer height;
     private Integer weight;
     private String nickname;
@@ -22,10 +20,8 @@ public class UserJoinResponse {
 
     public static UserJoinResponse of(UserDto userDto) {
         return UserJoinResponse.builder()
-                .id(userDto.getId())
+                .email(userDto.getEmail())
                 .name(userDto.getName())
-                .age(userDto.getAge())
-                .gender(userDto.getGender())
                 .height(userDto.getHeight())
                 .weight(userDto.getWeight())
                 .nickname(userDto.getNickname())

@@ -26,29 +26,32 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final BCryptPasswordEncoder encoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Value("${jwt.token.secret}")
     private String secretKey;
-    private Long expiredTimeMs = 1000 * 60 * 60l;
 
     public UserDto join(UserJoinRequest userJoinRequest) {
-        userRepository.findById(userJoinRequest.getId()).ifPresent(user -> {
-            throw new AppException(ErrorCode.DUPLICATED_USER_ID, String.format("UserId %s is duplicated", userJoinRequest.getId()));
-        });
+        if (userRepository.existsByEmail(userJoinRequest.getEmail())) {
+            throw new AppException(ErrorCode.DUPLICATED_USER_EMAIL);
+        }
 
-        User user = userRepository.save(userJoinRequest.toEntity(bCryptPasswordEncoder.encode(userJoinRequest.getPassword())));
+        if (userRepository.existsByNickname(userJoinRequest.getNickname())) {
+            throw new AppException(ErrorCode.DUPLICATED_USER_NICKNAME);
+        }
+
+        User user = userRepository.save(userJoinRequest.toEntity(encoder.encode(userJoinRequest.getPassword())));
         return UserDto.of(user);
     }
 
     public TokenDto login(UserLoginRequest userLoginRequest) {
-        User user = userRepository.findById(userLoginRequest.getId())
+        User user = userRepository.findByEmail(userLoginRequest.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUNDED));
 
-        if (!bCryptPasswordEncoder.matches(userLoginRequest.getPassword(), user.getPassword())) {
+        if (!encoder.matches(userLoginRequest.getPassword(), user.getPassword())) {
             throw new AppException(ErrorCode.INVALID_PASSWORD);
         }
 
@@ -101,6 +104,41 @@ public class UserService {
         refreshTokenRepository.save(newRefreshToken);
 
         return tokenDto;
+    }
+
+    // 정보 변경
+    @Transactional
+    public void editUserInfo(String password, Integer weight, Integer height, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUNDED));
+
+        String changedPassword = user.getPassword();
+        Integer changedWeight = user.getWeight();
+        Integer changeHeight = user.getHeight();
+
+        if (!password.equals("")) {
+            changedPassword = encoder.encode(password);
+        }
+        if (!weight.equals("")) {
+            changedWeight = weight;
+        }
+        if (!height.equals("")) {
+            changeHeight = height;
+        }
+
+        user.updateUser(changedPassword, changeHeight, changedWeight);
+        userRepository.save(user);
+    }
+
+
+    // 비밀번호 변경
+    public void changePassword (String email, String newPassword) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUNDED));
+
+        String encodedPassword = encoder.encode(newPassword);
+        user.changePassword(encodedPassword);
+        userRepository.save(user);
     }
 
 
