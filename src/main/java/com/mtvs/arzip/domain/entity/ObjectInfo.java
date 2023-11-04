@@ -3,10 +3,7 @@ package com.mtvs.arzip.domain.entity;
 import com.mtvs.arzip.domain.enum_class.ObjectType;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -20,15 +17,17 @@ public class ObjectInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long no;
 
+    @Enumerated(EnumType.STRING)
     private ObjectType objectType;  // 오브젝트 타입
+
     private String objectName;  // 오브젝트 이름
-    private String objectImage; // 오브젝트 이미지 링크
+//    private String objectImage; // 오브젝트 이미지 링크
 
-    public void update(String objectName, ObjectType objectType) {
 
+    public ObjectInfo(String objectName, ObjectType objectType) {
         this.objectName = objectName;
         this.objectType = objectType;
-
     }
+
 
 }
