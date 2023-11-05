@@ -23,6 +23,10 @@ public enum ErrorCode {
     INVALID_REFRESH_TOKEN(HttpStatus.NOT_FOUND, "Refresh Token이 유효하지 않습니다."),
     LOGOUT_USER(HttpStatus.NOT_FOUND, "로그아웃 된 사용자입니다."),
     TOKEN_NOT_MATCH(HttpStatus.UNAUTHORIZED,"토큰의 유저 정보가 일치하지 않습니다"),
+    AI_DRAWING_DATA_NOT_FOUND(HttpStatus.NOT_FOUND, "ai로 생성된 공간 정보를 찾을 수 없습니다."),
+    OBJECT_INFO_NOT_FOUND(HttpStatus.NOT_FOUND, "오브젝트가 존재하지 않습니다."),
+    SPACE_NOT_FOUND(HttpStatus.NOT_FOUND, "저장된 공간 정보가 존재하지 않습니다."),
+
 
     ;
 
