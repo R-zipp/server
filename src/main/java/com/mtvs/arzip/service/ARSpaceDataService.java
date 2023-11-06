@@ -13,14 +13,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class ARSpaceDataService {
 
-    private final ARSpaceDataReposiroty arSpaceDataReposiroty;
+    private final ARSpaceDataRepository arSpaceDataReposiroty;
     private final UserRepository userRepository;
     private final AiDrawingRepository aiDrawingRepository;
     private final ARObjectPlacementDataRepository arObjectPlacementDataRepository;
@@ -63,6 +62,20 @@ public class ARSpaceDataService {
         log.info("🏠request.getPlacements().toString() : {}", request.getPlacements().toString());
 
         return arSpaceData.getNo();
+    }
+
+    @Transactional(readOnly = true)
+    public ARSpaceDataResponse loadSpaceData(Long spaceNo) {
+
+        ARSpaceData arSpaceData = arSpaceDataReposiroty.findById(spaceNo)
+                .orElseThrow(()-> new AppException(ErrorCode.SPACE_NOT_FOUND));
+
+
+        // ARSpaceData에 연결된 ARObjectPlacementData 객체들을 조회
+        List<ARObjectPlacementData> placements = arObjectPlacementDataRepository.findByArSpaceData(arSpaceData);
+
+        // ARSpaceDataResponse 객체를 생성하여 반환
+        return new ARSpaceDataResponse(arSpaceData, placements);
     }
 
 }
