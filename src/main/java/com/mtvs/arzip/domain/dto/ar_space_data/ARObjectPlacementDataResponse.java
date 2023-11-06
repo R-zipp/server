@@ -11,10 +11,10 @@ import lombok.*;
 public class ARObjectPlacementDataResponse {
 
     private Long no;
-    private Integer x;
-    private Integer y;
-    private Integer z;
-    private Integer rotation;
+    private double x;
+    private double y;
+    private double z;
+    private double rotation;
     private Long arSpaceDataNo;
     private Long objectInfoNo;
 
