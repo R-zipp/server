@@ -26,6 +26,8 @@ public enum ErrorCode {
     AI_DRAWING_DATA_NOT_FOUND(HttpStatus.NOT_FOUND, "ai로 생성된 공간 정보를 찾을 수 없습니다."),
     OBJECT_INFO_NOT_FOUND(HttpStatus.NOT_FOUND, "오브젝트가 존재하지 않습니다."),
     SPACE_NOT_FOUND(HttpStatus.NOT_FOUND, "저장된 공간 정보가 존재하지 않습니다."),
+    SPACE_DATA_SAVING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"공간 정보 저장 중 오류가 발생했습니다."),
+    SPACE_DATA_LOADING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "공간 정보 조회 중 오류가 발생했습니다."),
 
 
     ;
