@@ -19,7 +19,7 @@ import java.util.List;
 @Slf4j
 public class ARSpaceDataService {
 
-    private final ARSpaceDataRepository arSpaceDataReposiroty;
+    private final ARSpaceDataRepository arSpaceDataRepository;
     private final UserRepository userRepository;
     private final AiDrawingRepository aiDrawingRepository;
     private final ARObjectPlacementDataRepository arObjectPlacementDataRepository;
@@ -43,7 +43,7 @@ public class ARSpaceDataService {
         log.info("🏠arSpaceData.getUser : {}",arSpaceData.getUser().getEmail());
         log.info("🏠request.getUserNo : {}", request.getUserNo());
 
-        arSpaceDataReposiroty.save(arSpaceData);
+        arSpaceDataRepository.save(arSpaceData);
 
         log.info("🏠arSpaceData : {}",arSpaceData.getNo());
 
@@ -67,7 +67,7 @@ public class ARSpaceDataService {
     @Transactional(readOnly = true)
     public ARSpaceDataResponse loadSpaceData(Long spaceNo) {
 
-        ARSpaceData arSpaceData = arSpaceDataReposiroty.findById(spaceNo)
+        ARSpaceData arSpaceData = arSpaceDataRepository.findById(spaceNo)
                 .orElseThrow(()-> new AppException(ErrorCode.SPACE_NOT_FOUND));
 
 
