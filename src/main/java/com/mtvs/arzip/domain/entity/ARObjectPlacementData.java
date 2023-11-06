@@ -22,7 +22,7 @@ public class ARObjectPlacementData {
     private Integer rotation; // 오브젝트 회전 값
 
     @JoinColumn(name = "arSpaceData_no")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private ARSpaceData arSpaceData;   // AR 공간 no
 
     @JoinColumn(name = "objectInfo_no")

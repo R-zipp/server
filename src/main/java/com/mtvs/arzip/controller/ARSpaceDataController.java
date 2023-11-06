@@ -32,5 +32,18 @@ public class ARSpaceDataController {
         return Response.success(new ObjectInfoResponse("AR 공간 저장 완료", savedSpaceNo));
     }
 
+    @GetMapping("/load/{spaceNo}")
+    public Response<ARSpaceDataResponse> loadSpace(@PathVariable Long spaceNo) {
+        ARSpaceDataResponse response;
+        try {
+            response = arSpaceDataService.loadSpaceData(spaceNo);
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.SPACE_DATA_LOADING_ERROR);
+        }
+
+        return Response.success(response);
+    }
+
+
 
 }
