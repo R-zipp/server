@@ -21,8 +21,6 @@ public class User extends BaseEntity{
     private String password;
 
     private String name;        // 이름
-    private Integer height;     // 키
-    private Integer weight;     // 몸무게
     private String nickname;    // 닉네임
 
     @Enumerated(EnumType.STRING)
@@ -39,9 +37,7 @@ public class User extends BaseEntity{
         this.password = newPassword;
     }
 
-    public void updateUser(String password, Integer height, Integer weight) {
+    public void updateUser(String password) {
         this.password = password;
-        this.height = height;
-        this.weight = weight;
     }
 }

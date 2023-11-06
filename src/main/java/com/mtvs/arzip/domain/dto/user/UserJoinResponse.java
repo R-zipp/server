@@ -13,8 +13,6 @@ public class UserJoinResponse {
 
     private String email;
     private String name;
-    private Integer height;
-    private Integer weight;
     private String nickname;
     private String role;
 
@@ -22,8 +20,6 @@ public class UserJoinResponse {
         return UserJoinResponse.builder()
                 .email(userDto.getEmail())
                 .name(userDto.getName())
-                .height(userDto.getHeight())
-                .weight(userDto.getWeight())
                 .nickname(userDto.getNickname())
                 .role(userDto.getRole())
                 .build();
