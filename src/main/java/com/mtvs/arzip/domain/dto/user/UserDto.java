@@ -16,8 +16,6 @@ public class UserDto {
     private String email;
     private String password;
     private String name;
-    private Integer height;
-    private Integer weight;
     private String nickname;
     private String role;
 
@@ -28,8 +26,6 @@ public class UserDto {
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .name(user.getName())
-                .height(user.getHeight())
-                .weight(user.getWeight())
                 .nickname(user.getNickname())
                 .role(user.getRole().name())
                 .build();

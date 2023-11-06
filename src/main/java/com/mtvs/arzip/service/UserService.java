@@ -108,25 +108,17 @@ public class UserService {
 
     // 정보 변경
     @Transactional
-    public void editUserInfo(String password, Integer weight, Integer height, String email) {
+    public void editUserInfo(String password, String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUNDED));
 
         String changedPassword = user.getPassword();
-        Integer changedWeight = user.getWeight();
-        Integer changeHeight = user.getHeight();
 
         if (!password.equals("")) {
             changedPassword = encoder.encode(password);
         }
-        if (!weight.equals("")) {
-            changedWeight = weight;
-        }
-        if (!height.equals("")) {
-            changeHeight = height;
-        }
 
-        user.updateUser(changedPassword, changeHeight, changedWeight);
+        user.updateUser(changedPassword);
         userRepository.save(user);
     }
 

@@ -12,7 +12,5 @@ import lombok.Setter;
 public class UserEditRequest {
 
     private String password;
-    private Integer weight;
-    private Integer height;
 
 }
