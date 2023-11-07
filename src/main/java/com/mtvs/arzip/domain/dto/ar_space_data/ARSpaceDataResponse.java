@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 public class ARSpaceDataResponse {
 
     private Long spaceNo;
+    private String title;
     private Integer views;
     private Integer maxConnectionCount;
     private String nickname;
@@ -25,6 +26,7 @@ public class ARSpaceDataResponse {
 
     public ARSpaceDataResponse(ARSpaceData arSpaceData, List<ARObjectPlacementData> placements) {
         this.spaceNo = arSpaceData.getNo();
+        this.title = arSpaceData.getTitle();
         this.views = arSpaceData.getViews();
         this.maxConnectionCount = arSpaceData.getMaxConnectionCount();
         this.nickname = arSpaceData.getUser().getNickname();

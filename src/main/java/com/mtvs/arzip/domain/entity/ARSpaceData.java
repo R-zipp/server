@@ -22,6 +22,8 @@ public class ARSpaceData extends BaseEntity{
 
     private Integer maxConnectionCount; // 최대 접속 인원 수
 
+    private String title;  // 공간 이름
+
     @JoinColumn(name = "user_no")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;  // AR 공간 생성자 이름

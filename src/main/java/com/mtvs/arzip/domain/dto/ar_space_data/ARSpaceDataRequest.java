@@ -16,6 +16,7 @@ public class ARSpaceDataRequest {
 
     private Integer views;
     private Integer maxConnectionCount;
+    private String title;
     private Long userNo;
     private Long aiDrawingDataNo;
     private List<ARObjectPlacementDataRequest> placements;
@@ -24,6 +25,7 @@ public class ARSpaceDataRequest {
         return ARSpaceData.builder()
                 .views(views)
                 .maxConnectionCount(maxConnectionCount)
+                .title(title)
                 .user(user)
                 .aiDrawingData(aiDrawingData)
                 .build();
