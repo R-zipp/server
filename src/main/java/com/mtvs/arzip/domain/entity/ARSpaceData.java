@@ -24,6 +24,8 @@ public class ARSpaceData extends BaseEntity{
 
     private String title;  // 공간 이름
 
+    private boolean isShared  = false;
+
     @JoinColumn(name = "user_no")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;  // AR 공간 생성자 이름
@@ -31,6 +33,14 @@ public class ARSpaceData extends BaseEntity{
     @JoinColumn(name = "aiDrawingData_no")
     @ManyToOne(fetch = FetchType.LAZY)
     private AIDrawingData aiDrawingData;  // AR 공간에 사용된 도면 No
+
+    public void share() {
+        this.isShared = true;
+    }
+
+    public void addViews() {
+        this.views++;
+    }
 
 
 }

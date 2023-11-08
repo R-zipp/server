@@ -34,6 +34,8 @@ public class UserRestController {
 
     @PostMapping("/login")
     public Response<TokenDto> login(@RequestBody @Valid UserLoginRequest userLoginRequest) {
+        System.out.println("🏠로그인 한 email : " + userLoginRequest.getEmail());
+        System.out.println("🏠로그인 한 password : " + userLoginRequest.getPassword());
         return Response.success(userService.login(userLoginRequest));
     }
 
@@ -43,17 +45,17 @@ public class UserRestController {
     }
 
     // 인증 메일 보내기
-    @GetMapping("/send-auth-email")
-    public Response<String> sendAuthEmail(@RequestParam String email) throws Exception {
-        System.out.println("email = " + email);
-        return Response.success(emailService.sendLoginAuthMessage(email));
+    @PostMapping("/send-auth-email")
+    public Response<String> sendAuthEmail(@RequestBody UserEmailRequest email) throws Exception {
+        System.out.println("email = " + email.getEmail());
+        return Response.success(emailService.sendLoginAuthMessage(email.getEmail()));
     }
 
     // 인증 메일 확인 하기
-    @GetMapping("/check-auth-email")
-    public Response<Boolean> checkAuthEmail(@RequestParam String code) {
-        System.out.println(code);
-        if (emailService.getData(code) == null) return Response.success(false);
+    @PostMapping("/check-auth-email")
+    public Response<Boolean> checkAuthEmail(@RequestBody UserCodeRequest request) {
+        System.out.println(request.getCode());
+        if (emailService.getData(request.getCode()) == null) return Response.success(false);
         else return Response.success(true);
     }
 

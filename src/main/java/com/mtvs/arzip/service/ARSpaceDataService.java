@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,9 +28,12 @@ public class ARSpaceDataService {
     private final ObjectInfoRepository objectInfoRepository;
 
     @Transactional
-    public Long saveSpaceData(ARSpaceDataRequest request) {
+    public Long saveSpaceData(ARSpaceDataRequest request, Principal principal) {
 
-        User user = userRepository.findById(request.getUserNo())
+        Long id = Long.parseLong(principal.getName());
+        log.info("🏠principal.getName() : {}", principal.getName());
+
+        User user = userRepository.findById(id)
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUNDED));
 
         AIDrawingData aiDrawingData = aiDrawingRepository.findById(request.getAiDrawingDataNo())
@@ -64,12 +69,29 @@ public class ARSpaceDataService {
         return arSpaceData.getNo();
     }
 
-    @Transactional(readOnly = true)
-    public ARSpaceDataResponse loadSpaceData(Long spaceNo) {
+    @Transactional
+    public ARSpaceDataResponse loadSpaceData(Long spaceNo, Principal principal) {
+
+        Long id = Long.parseLong(principal.getName());
+
 
         ARSpaceData arSpaceData = arSpaceDataRepository.findById(spaceNo)
                 .orElseThrow(()-> new AppException(ErrorCode.SPACE_NOT_FOUND));
 
+        // 프로젝트를 생성한 사용자와 조회하는 사용자가 일치하는 경우는 조회수 증가하지 않음
+        // 프로젝트가 공유되지 않았을 경우, 생성한 사용자만 조회 가능
+        if (!arSpaceData.getUser().getNo().equals(id)) {
+            // 프로젝트가 공유된 경우에만 조회할 수 있음
+            if (!arSpaceData.isShared()) {
+                throw new AppException(ErrorCode.SPACE_NOT_FOUND);
+            }
+            arSpaceData.addViews();
+        } else {
+            // 프로젝트를 생성한 사용자가 조회하는 경우, 조회수가 증가하지 않음
+            if (!arSpaceData.isShared()) {
+                return new ARSpaceDataResponse(arSpaceData, new ArrayList<>());
+            }
+        }
 
         // ARSpaceData에 연결된 ARObjectPlacementData 객체들을 조회
         List<ARObjectPlacementData> placements = arObjectPlacementDataRepository.findByArSpaceData(arSpaceData);
@@ -77,5 +99,16 @@ public class ARSpaceDataService {
         // ARSpaceDataResponse 객체를 생성하여 반환
         return new ARSpaceDataResponse(arSpaceData, placements);
     }
+
+    @Transactional
+    public void share(Long spaceNo) {
+
+        ARSpaceData arSpaceData = arSpaceDataRepository.findById(spaceNo)
+                .orElseThrow(()-> new AppException(ErrorCode.SPACE_NOT_FOUND));
+
+        arSpaceData.share();
+    }
+
+
 
 }
