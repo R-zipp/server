@@ -36,6 +36,11 @@ public class ARSpaceDataService {
         User user = userRepository.findById(id)
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUNDED));
 
+//        Long aiDrawingDataNo = user.getLastUploadFloorPlanId();
+
+//        AIDrawingData aiDrawingData = aiDrawingRepository.findById(aiDrawingDataNo)
+//                .orElseThrow(()-> new AppException(ErrorCode.AI_DRAWING_DATA_NOT_FOUND));
+
         AIDrawingData aiDrawingData = aiDrawingRepository.findById(request.getAiDrawingDataNo())
                 .orElseThrow(()-> new AppException(ErrorCode.AI_DRAWING_DATA_NOT_FOUND));
 
