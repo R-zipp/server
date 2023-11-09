@@ -28,6 +28,7 @@ public enum ErrorCode {
     SPACE_NOT_FOUND(HttpStatus.NOT_FOUND, "저장된 공간 정보가 존재하지 않습니다."),
     SPACE_DATA_SAVING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"공간 정보 저장 중 오류가 발생했습니다."),
     SPACE_DATA_LOADING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "공간 정보 조회 중 오류가 발생했습니다."),
+    UNSHARED_SPACE(HttpStatus.BAD_GATEWAY, "공유되지 않은 공간입니다."),
 
 
     ;

@@ -83,7 +83,7 @@ public class ARSpaceDataService {
         if (!arSpaceData.getUser().getNo().equals(id)) {
             // 프로젝트가 공유된 경우에만 조회할 수 있음
             if (!arSpaceData.isShared()) {
-                throw new AppException(ErrorCode.SPACE_NOT_FOUND);
+                throw new AppException(ErrorCode.UNSHARED_SPACE);
             }
             arSpaceData.addViews();
         } else {
