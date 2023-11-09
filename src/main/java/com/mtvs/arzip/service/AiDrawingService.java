@@ -4,9 +4,11 @@ import com.amazonaws.util.IOUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mtvs.arzip.domain.dto.ai_drawing_data.*;
 import com.mtvs.arzip.domain.entity.AIDrawingData;
+import com.mtvs.arzip.domain.entity.User;
 import com.mtvs.arzip.exception.AppException;
 import com.mtvs.arzip.exception.ErrorCode;
 import com.mtvs.arzip.repository.AiDrawingRepository;
+import com.mtvs.arzip.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -30,16 +32,19 @@ public class AiDrawingService {
     private final AiDrawingRepository aiDrawingRepository;
     private final S3FileTestService s3Service;
     private final ObjectMapper objectMapper;
+    private final UserRepository userRepository;
 
 
     // 유저가 올린 손 도면 이미지 타입, url 저장
     public String userUploadFloorPlan(InputStream stream, AiDrawingDataFloorPlanRequest request, String etc, String contentType) throws IOException {
-        return userUpload(stream, request, (s, r) -> AiDrawingDataFloorPlanRequest.toEntity((AiDrawingDataFloorPlanRequest) r), etc, contentType);
+        // , Principal principal
+        return userUpload(stream, request, (s, r) -> AiDrawingDataFloorPlanRequest.toEntity((AiDrawingDataFloorPlanRequest) r), etc, contentType); // , principal
     }
 
     // 유저가 올린 일반 도면 이미지 타입, url 저장
     public String userUploadHandIMG(InputStream stream, AiDrawingDataHandingRequest request, String etc, String contentType) throws IOException {
-        return userUpload(stream, request, (s, r) -> AiDrawingDataHandingRequest.toEntity((AiDrawingDataHandingRequest) r), etc, contentType);
+        // , Principal principal
+        return userUpload(stream, request, (s, r) -> AiDrawingDataHandingRequest.toEntity((AiDrawingDataHandingRequest) r), etc, contentType);  // , principal
     }
 
 
@@ -85,8 +90,9 @@ public class AiDrawingService {
     // BiFunction<InputStream, Object, AIDrawingData> toEntity
     // 이 매개변수는 두 개의 입력값(InputStream과 Object)을 받아 AIDrawingData 타입의 결과를 반환하는 함수
     // 두 개의 입력값을 받아 결과를 반환하는 메소드를 가지고 있다.
-    
+
     public String userUpload(InputStream stream, Object request, BiFunction<InputStream, Object, AIDrawingData> toEntity, String etc, String contentType) throws IOException {
+         // , Principal principal
         log.info("🏠AiDrawing 서비스 코드 시작");
 
         System.out.println("stream = " + stream);
@@ -146,6 +152,13 @@ public class AiDrawingService {
 
         // entity 저장
         aiDrawingRepository.save(aiDrawingData);
+
+        // User 엔티티의 lastUploadedDrawingDataId 필드를 업데이트
+//        User user = userRepository.findById(Long.parseLong(principal.getName()))
+//                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUNDED));
+//        user.updateLastUploadedDrawingDataId(aiDrawingData.getNo());
+//        userRepository.save(user);
+
         log.info("🏠FBX 파일 URL 저장 완료");
 
         return result.getFbxFile();

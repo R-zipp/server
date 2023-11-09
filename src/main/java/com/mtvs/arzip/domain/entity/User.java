@@ -26,8 +26,7 @@ public class User extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private UserRole role;  // 권한
 
-    private String provider;   // 소셜 로그인 타입
-    private String providerId; // 소셜 로그인 id
+    private Long lastUploadFloorPlanId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "character_no")
@@ -39,5 +38,9 @@ public class User extends BaseEntity{
 
     public void updateUser(String password) {
         this.password = password;
+    }
+
+    public void updateLastUploadFloorPlanId(Long lastUploadFloorPlanId) {
+        this.lastUploadFloorPlanId = lastUploadFloorPlanId;
     }
 }
