@@ -21,4 +21,8 @@ public class WallPaperInfo {
 
     private String wallPaperType;  // 벽지 타입
 
+    public WallPaperInfo(String wallPaperType) {
+        this.wallPaperType = wallPaperType;
+    }
+
 }
