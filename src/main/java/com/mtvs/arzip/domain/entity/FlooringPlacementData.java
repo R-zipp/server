@@ -9,8 +9,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class ARWallPaperPlacement {
-    // AR 공간에 적용된 벽지 정보
+public class FlooringPlacementData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,8 +30,7 @@ public class ARWallPaperPlacement {
     @ManyToOne(fetch = FetchType.LAZY)
     private ARSpaceData arSpaceData;   // AR 공간 no
 
-    @JoinColumn(name = "wallPaperInfo_no")
+    @JoinColumn(name = "flooring_no")
     @ManyToOne(fetch = FetchType.LAZY)
-    private WallPaperInfo wallPaperInfo;  // 벽지 no
-
+    private FlooringInfo flooringInfo;   // AR 공간 no
 }
