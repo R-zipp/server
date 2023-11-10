@@ -13,11 +13,13 @@ public class AiDrawingDataFloorPlanRequest {
 
     private String drawingType;
     private String userDrawingImage;
+    private Integer houseSize;
 
     public static AIDrawingData toEntity(AiDrawingDataFloorPlanRequest dto) {
         return AIDrawingData.builder()
                 .drawingType(DrawingType.FLOORPLAN)
                 .userDrawingImage(dto.getUserDrawingImage())
+                .houseSize(dto.houseSize)
                 .build();
     }
 }

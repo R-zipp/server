@@ -36,29 +36,34 @@ public class AiDrawingService {
 
 
     // 유저가 올린 손 도면 이미지 타입, url 저장
-    public String userUploadFloorPlan(InputStream stream, AiDrawingDataFloorPlanRequest request, String etc, String contentType) throws IOException {
-        // , Principal principal
-        return userUpload(stream, request, (s, r) -> AiDrawingDataFloorPlanRequest.toEntity((AiDrawingDataFloorPlanRequest) r), etc, contentType); // , principal
+    public String userUploadFloorPlan(InputStream stream, AiDrawingDataFloorPlanRequest request, String etc, String contentType, Integer houseSize) throws IOException {
+        return userUpload(stream, request, (s, r) -> AiDrawingDataFloorPlanRequest.toEntity((AiDrawingDataFloorPlanRequest) r), etc, contentType, houseSize);
     }
 
     // 유저가 올린 일반 도면 이미지 타입, url 저장
-    public String userUploadHandIMG(InputStream stream, AiDrawingDataHandingRequest request, String etc, String contentType) throws IOException {
+    public String userUploadHandIMG(InputStream stream, AiDrawingDataHandingRequest request, String etc, String contentType, Integer houseSize) throws IOException {
         // , Principal principal
-        return userUpload(stream, request, (s, r) -> AiDrawingDataHandingRequest.toEntity((AiDrawingDataHandingRequest) r), etc, contentType);  // , principal
+        return userUpload(stream, request, (s, r) -> AiDrawingDataHandingRequest.toEntity((AiDrawingDataHandingRequest) r), etc, contentType, houseSize);  // , principal
     }
 
 
     // 사용자가 올린 도면 이미지 db ai로 전송
-    private AiDrawingDataResponse sendDrawingDataToAI(AiDrawingDataResponse aiDrawingDataResponse, AiDrawingDataAIRequest request) throws IOException {
+    private AiDrawingDataResponse sendDrawingDataToAI(AIDrawingData aiDrawingData, AiDrawingDataAIRequest request) throws IOException {
         log.info("🏠AI로 데이터 전송 서비스 코드 시작");
 
         WebClient webClient = WebClient.builder().baseUrl("http://127.0.0.1:8000").build();
+
+        // AiDrawingDataResponse 객체 생성
+        AiDrawingDataResponse aiDrawingDataResponse = new AiDrawingDataResponse();
+        aiDrawingDataResponse.setDrawingType(aiDrawingData.getDrawingType().name());
+        aiDrawingDataResponse.setUserDrawingImage(aiDrawingData.getUserDrawingImage());
+        aiDrawingDataResponse.setHouseSize(request.getHouseSize());
 
         try {
             // AI 서버로부터 S3 URL을 받아옴
             AiResponse aiResponse = webClient.post()
                     .uri("/spring/img_to_fbx_S3_test")
-                      .contentType(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
                     .body(BodyInserters.fromValue(aiDrawingDataResponse))
                     .retrieve()
                     .bodyToMono(AiResponse.class)
@@ -86,12 +91,13 @@ public class AiDrawingService {
         }
     }
 
+
     @Transactional
     // BiFunction<InputStream, Object, AIDrawingData> toEntity
     // 이 매개변수는 두 개의 입력값(InputStream과 Object)을 받아 AIDrawingData 타입의 결과를 반환하는 함수
     // 두 개의 입력값을 받아 결과를 반환하는 메소드를 가지고 있다.
 
-    public String userUpload(InputStream stream, Object request, BiFunction<InputStream, Object, AIDrawingData> toEntity, String etc, String contentType) throws IOException {
+    public String userUpload(InputStream stream, Object request, BiFunction<InputStream, Object, AIDrawingData> toEntity, String etc, String contentType, Integer houseSize) throws IOException {
          // , Principal principal
         log.info("🏠AiDrawing 서비스 코드 시작");
 
@@ -139,13 +145,17 @@ public class AiDrawingService {
         // AiDrawingDataResponse 객체 생성
         AiDrawingDataResponse aiDrawingDataResponse = new AiDrawingDataResponse();
         aiDrawingDataResponse.setUserDrawingImage(s3ImageUrl);
+        aiDrawingDataResponse.setHouseSize(houseSize);
         aiDrawingDataResponse.setDrawingType(aiDrawingData.getDrawingType().name());
+
 
         // AiDrawingDataAIRequest 객체 생성
         AiDrawingDataAIRequest aiDrawingDataAIRequest = new AiDrawingDataAIRequest();
+        aiDrawingDataAIRequest.setHouseSize(houseSize);
+        aiDrawingDataAIRequest.setDrawingType(((AiDrawingDataHandingRequest) request).getDrawingType()); // AiDrawingDataAIRequest 객체에 drawingType을 설정.
 
         log.info("🏠AI로 전송 시작");
-        AiDrawingDataResponse result = sendDrawingDataToAI(aiDrawingDataResponse, aiDrawingDataAIRequest);
+        AiDrawingDataResponse result = sendDrawingDataToAI(aiDrawingData, aiDrawingDataAIRequest);
 
         // AI 서버로부터 받은 FBX 파일의 S3 URL을 AiDrawingData 엔티티에 저장
         aiDrawingData.updateFbxFile(result.getFbxFile());
