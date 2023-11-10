@@ -12,7 +12,7 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class UserCharacter extends BaseEntity{
+public class UserCharacter{
     // 캐릭터 정보
 
     @Id
