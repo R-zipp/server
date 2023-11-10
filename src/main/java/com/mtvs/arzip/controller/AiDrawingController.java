@@ -8,10 +8,7 @@ import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,11 +24,13 @@ public class AiDrawingController {
 
     // 사용자가 올린 일반 도면 정보 저장, 데이터 전송
     @PostMapping(value = "/process", consumes = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+    // 'process?houseSize=' + houseSize
     public String uploadFloorPlan(InputStream stream, AiDrawingDataFloorPlanRequest request,
                                   @RequestHeader("Content-Type") String contentType
                               //    ,  @AuthenticationPrincipal Principal principal
     ) {
 
+        System.out.println("넘어온 평수: " + request.getHouseSize());
         System.out.println("contentType = " + contentType);
         System.out.println("stream = " + stream);
 
@@ -44,12 +43,13 @@ public class AiDrawingController {
 
         try {
             // 호출 시 principal 파라미터 추가
-            String result = aiDrawingService.userUploadFloorPlan(stream, request, etc, contentType);  // , principal
+            String result = aiDrawingService.userUploadFloorPlan(stream, request, etc, contentType, request.getHouseSize());  // , principal
             System.out.println("🏠Unreal이 받는 문자열: " + Response.success(result).getMessage());
             return Response.success(result).getMessage();
         } catch (IOException e) {
             return Response.error("이미지 처리 중 오류가 발생했습니다: " + e.getMessage()).getMessage();
         }
+
     }
 
 
@@ -58,6 +58,7 @@ public class AiDrawingController {
     public String uploadHandImg(InputStream stream, AiDrawingDataHandingRequest request,
                                        @RequestHeader("Content-Type") String contentType) {
 
+        System.out.println("넘어온 평수: " + request.getHouseSize());
         System.out.println("contentType = " + contentType);
         System.out.println("stream = " + stream);
 
@@ -69,7 +70,7 @@ public class AiDrawingController {
         }
 
         try {
-            String result = aiDrawingService.userUploadHandIMG(stream, request, etc, contentType);
+            String result = aiDrawingService.userUploadHandIMG(stream, request, etc, contentType, request.getHouseSize());
             System.out.println("🏠Unreal이 받는 문자열: " + Response.success(result).getMessage());
             return Response.success(result).getMessage();
         } catch (IOException e) {

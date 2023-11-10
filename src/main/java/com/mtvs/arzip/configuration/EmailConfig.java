@@ -34,7 +34,7 @@ public class EmailConfig {
     @Value("${MAIL_ID}")
     private String id;
 
-    @Value("${MAIL.PASSWORD}")
+    @Value("${MAIL_PASSWORD}")
     private String password;
 
 
