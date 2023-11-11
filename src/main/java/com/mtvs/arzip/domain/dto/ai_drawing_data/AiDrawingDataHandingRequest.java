@@ -13,7 +13,7 @@ public class AiDrawingDataHandingRequest {
 
     private String drawingType;
     private String userDrawingImage;
-    private Integer houseSize;
+    private String houseSize;
 
     public static AIDrawingData toEntity(AiDrawingDataHandingRequest dto) {
         return AIDrawingData.builder()

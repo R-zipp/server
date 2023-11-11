@@ -18,7 +18,7 @@ public class AIDrawingDataDto {
     private DrawingType drawingType;
     private String userDrawingImage;
     private String fbxFile;
-    private Integer houseSize;
+    private String houseSize;
 
     public static AIDrawingDataDto of (AIDrawingData aiDrawingData) {
         return AIDrawingDataDto.builder()

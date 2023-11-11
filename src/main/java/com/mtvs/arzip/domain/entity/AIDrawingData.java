@@ -5,6 +5,7 @@ import com.mtvs.arzip.domain.enum_class.DrawingType;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
@@ -26,7 +27,8 @@ public class AIDrawingData {
     @JsonProperty("URL") // JSON 키를 "URL"로 명시적으로 매핑
     private String fbxFile; // 3D 도면 이미지 링크
 
-    private Integer houseSize;  // 집 평수
+    @NotNull
+    private String houseSize;  // 집 평수
 
 //     @JoinColumn(name = "user_no")
 //     @ManyToOne(fetch = FetchType.LAZY)

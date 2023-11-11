@@ -13,7 +13,7 @@ public class AiDrawingDataAIRequest {
 
     private String drawingType;
     private String fbxFile;
-    private Integer houseSize;
+    private String houseSize;
 
     public static AIDrawingData toEntity(AiDrawingDataAIRequest dto) {
         return AIDrawingData.builder()
