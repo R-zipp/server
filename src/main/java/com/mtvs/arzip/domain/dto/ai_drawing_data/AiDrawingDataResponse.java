@@ -14,6 +14,7 @@ public class AiDrawingDataResponse {
     private String drawingType;
     private String userDrawingImage;
     private String houseSize;
+    private int wallPaperNo;
 
     // ai에서 넣어야 할 url 경로
     @JsonProperty("URL") // JSON 키를 "URL"로 명시적으로 매핑

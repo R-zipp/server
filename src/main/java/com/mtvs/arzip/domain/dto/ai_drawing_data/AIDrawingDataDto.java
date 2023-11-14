@@ -19,6 +19,7 @@ public class AIDrawingDataDto {
     private String userDrawingImage;
     private String fbxFile;
     private String houseSize;
+    private int wallPaperNo;
 
     public static AIDrawingDataDto of (AIDrawingData aiDrawingData) {
         return AIDrawingDataDto.builder()
@@ -27,6 +28,7 @@ public class AIDrawingDataDto {
                 .userDrawingImage(aiDrawingData.getUserDrawingImage())
                 .fbxFile(aiDrawingData.getFbxFile())
                 .houseSize(aiDrawingData.getHouseSize())
+                .wallPaperNo(aiDrawingData.getWallPaperNo())
                 .build();
     }
 }

@@ -30,6 +30,8 @@ public class AIDrawingData {
     @NotNull
     private String houseSize;  // 집 평수
 
+    private int wallPaperNo;  // 벽지 번호
+
 //     @JoinColumn(name = "user_no")
 //     @ManyToOne(fetch = FetchType.LAZY)
 //     private User user;

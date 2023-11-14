@@ -28,7 +28,9 @@ public class AiDrawingController {
     public String uploadFloorPlan(InputStream stream, AiDrawingDataFloorPlanRequest request,
                                   @RequestHeader("Content-Type") String contentType) {
 
+        System.out.println("🏠일반 도면 controller");
         System.out.println("🏠넘어온 평수: " + request.getHouseSize());
+        System.out.println("🏠넘어온 벽지 번호: " + request.getWallPaperNo());
         System.out.println("contentType = " + contentType);
         System.out.println("stream = " + stream);
 
@@ -40,7 +42,7 @@ public class AiDrawingController {
         }
 
         try {
-            String result = aiDrawingService.userUploadFloorPlan(stream, request, etc, contentType, request.getHouseSize());
+            String result = aiDrawingService.userUploadFloorPlan(stream, request, etc, contentType, request.getHouseSize(), request.getWallPaperNo());
             System.out.println("🏠Unreal이 받는 문자열: " + Response.success(result).getMessage());
             return Response.success(result).getMessage();
         } catch (IOException e) {
@@ -53,7 +55,9 @@ public class AiDrawingController {
     public String uploadHandImg(InputStream stream, AiDrawingDataHandingRequest request,
                                 @RequestHeader("Content-Type") String contentType) {
 
+        System.out.println("🏠손 도면 controller");
         System.out.println("🏠넘어온 평수: " + request.getHouseSize());
+        System.out.println("🏠넘어온 벽지 번호: " + request.getWallPaperNo());
         System.out.println("contentType = " + contentType);
         System.out.println("stream = " + stream);
 
@@ -65,7 +69,7 @@ public class AiDrawingController {
         }
 
         try {
-            String result = aiDrawingService.userUploadHandIMG(stream, request, etc, contentType, request.getHouseSize());
+            String result = aiDrawingService.userUploadHandIMG(stream, request, etc, contentType, request.getHouseSize(), request.getWallPaperNo());
             System.out.println("🏠Unreal이 받는 문자열: " + Response.success(result).getMessage());
             return Response.success(result).getMessage();
         } catch (IOException e) {
