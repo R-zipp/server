@@ -25,7 +25,7 @@ public class ARSpaceDataRequest {
         return ARSpaceData.builder()
                 .views(views)
                 .maxConnectionCount(maxConnectionCount)
-                .title(title)
+                .title(this.title)
                 .user(user)
                 .aiDrawingData(aiDrawingData)
                 .build();

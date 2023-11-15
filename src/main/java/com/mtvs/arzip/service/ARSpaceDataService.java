@@ -3,12 +3,15 @@ package com.mtvs.arzip.service;
 import com.mtvs.arzip.domain.dto.ar_space_data.ARObjectPlacementDataRequest;
 import com.mtvs.arzip.domain.dto.ar_space_data.ARSpaceDataRequest;
 import com.mtvs.arzip.domain.dto.ar_space_data.ARSpaceDataResponse;
+import com.mtvs.arzip.domain.dto.ar_space_data.ARSpaceListResponse;
 import com.mtvs.arzip.domain.entity.*;
 import com.mtvs.arzip.exception.AppException;
 import com.mtvs.arzip.exception.ErrorCode;
 import com.mtvs.arzip.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,11 +38,6 @@ public class ARSpaceDataService {
 
         User user = userRepository.findById(id)
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUNDED));
-
-//        Long aiDrawingDataNo = user.getLastUploadFloorPlanId();
-
-//        AIDrawingData aiDrawingData = aiDrawingRepository.findById(aiDrawingDataNo)
-//                .orElseThrow(()-> new AppException(ErrorCode.AI_DRAWING_DATA_NOT_FOUND));
 
         AIDrawingData aiDrawingData = aiDrawingRepository.findById(request.getAiDrawingDataNo())
                 .orElseThrow(()-> new AppException(ErrorCode.AI_DRAWING_DATA_NOT_FOUND));
@@ -103,6 +101,15 @@ public class ARSpaceDataService {
 
         // ARSpaceDataResponse 객체를 생성하여 반환
         return new ARSpaceDataResponse(arSpaceData, placements);
+    }
+
+
+    public Page<ARSpaceListResponse> loadMyList(Pageable pageable) {
+
+        Page<ARSpaceData> arSpaceDatas = arSpaceDataRepository.findAll(pageable);
+        Page<ARSpaceListResponse> spaceListResponses = ARSpaceListResponse.listResponses(arSpaceDatas);
+
+        return spaceListResponses;
     }
 
     @Transactional

@@ -2,6 +2,7 @@ package com.mtvs.arzip.controller;
 
 import com.mtvs.arzip.domain.dto.ar_space_data.ARSpaceDataRequest;
 import com.mtvs.arzip.domain.dto.ar_space_data.ARSpaceDataResponse;
+import com.mtvs.arzip.domain.dto.ar_space_data.ARSpaceListResponse;
 import com.mtvs.arzip.domain.dto.object_info.ObjectInfoResponse;
 import com.mtvs.arzip.domain.entity.User;
 import com.mtvs.arzip.exception.AppException;
@@ -10,6 +11,10 @@ import com.mtvs.arzip.exception.Response;
 import com.mtvs.arzip.service.ARSpaceDataService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -49,6 +54,10 @@ public class ARSpaceDataController {
         return Response.success("공간 공유 완료");
     }
 
-
+    @GetMapping("/list")
+    public Response<Page<ARSpaceListResponse>> list(@PageableDefault(sort = "createdAt", size = 20, direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<ARSpaceListResponse> listResponses = arSpaceDataService.loadMyList(pageable);
+        return Response.success(listResponses);
+    }
 
 }
