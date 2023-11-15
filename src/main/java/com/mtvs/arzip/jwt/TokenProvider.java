@@ -6,6 +6,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,10 +28,12 @@ public class TokenProvider {
     private static final String BEARER_TYPE = "Bearer";
     private static final long ACCESS_TOKEN_EXPIRE_TIME = TimeUnit.MINUTES.toMillis(30);  // 30분
     private static final long REFRESH_TOKEN_EXPIRE_TIME =  TimeUnit.DAYS.toMillis(14);  // 2주
+    private final RedisTemplate<String, String> redisTemplate;
 
     private final Key key;
 
-    public TokenProvider(@Value("${jwt.token.secret}") String secretKey) {
+    public TokenProvider(@Value("${jwt.token.secret}") String secretKey, RedisTemplate<String, String> redisTemplate) {
+        this.redisTemplate = redisTemplate;
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
@@ -57,6 +60,16 @@ public class TokenProvider {
                 .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
+
+        log.info("refreshToken : {}", refreshToken);
+        log.info("사용자의 이름 : {}", authentication.getName());
+
+        redisTemplate.opsForValue().set(
+                authentication.getName(),
+                refreshToken,
+                REFRESH_TOKEN_EXPIRE_TIME,
+                TimeUnit.MILLISECONDS
+        );
 
         return TokenDto.builder()
                 .accessToken(accessToken)
