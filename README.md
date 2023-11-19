@@ -22,6 +22,7 @@
 ## 3. BackEnd 구현 기능
 ### User
 - Spring Security와 JWT 기반 회원가입/로그인 구현
+- 회원 가입 시 이메일 인증 진행(인증 번호 redis 관리)
 - Refresh Token 저장 시 만료일 설정과 빠른 조회를 위해 Redis 사용
 
 ### Image upload
