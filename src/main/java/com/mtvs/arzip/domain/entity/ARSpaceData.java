@@ -20,7 +20,7 @@ public class ARSpaceData extends BaseEntity{
     @ColumnDefault(value = "0")
     private Integer views;      // 조회수
 
-    private Integer maxConnectionCount; // 최대 접속 인원 수
+//    private Integer maxConnectionCount; // 최대 접속 인원 수
 
     private String title;  // 공간 이름
 

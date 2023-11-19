@@ -19,7 +19,7 @@ public class ARSpaceDataResponse {
     private Long spaceNo;
     private String title;
     private Integer views;
-    private Integer maxConnectionCount;
+//    private Integer maxConnectionCount;
     private String nickname;
     private String fbxFile;
     private List<ARObjectPlacementDataResponse> placements;
@@ -28,7 +28,7 @@ public class ARSpaceDataResponse {
         this.spaceNo = arSpaceData.getNo();
         this.title = arSpaceData.getTitle();
         this.views = arSpaceData.getViews();
-        this.maxConnectionCount = arSpaceData.getMaxConnectionCount();
+//        this.maxConnectionCount = arSpaceData.getMaxConnectionCount();
         this.nickname = arSpaceData.getUser().getNickname();
         this.fbxFile = arSpaceData.getAiDrawingData().getFbxFile();
         this.placements = placements.stream().map(ARObjectPlacementDataResponse::new).collect(Collectors.toList());

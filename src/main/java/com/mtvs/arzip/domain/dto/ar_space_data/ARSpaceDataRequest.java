@@ -15,7 +15,7 @@ import java.util.List;
 public class ARSpaceDataRequest {
 
     private Integer views;
-    private Integer maxConnectionCount;
+//    private Integer maxConnectionCount;
     private String title;
     private Long userNo;
     private Long aiDrawingDataNo;
@@ -24,7 +24,7 @@ public class ARSpaceDataRequest {
     public ARSpaceData toEntity(User user, AIDrawingData aiDrawingData) {
         return ARSpaceData.builder()
                 .views(views)
-                .maxConnectionCount(maxConnectionCount)
+//                .maxConnectionCount(maxConnectionCount)
                 .title(this.title)
                 .user(user)
                 .aiDrawingData(aiDrawingData)

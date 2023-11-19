@@ -51,6 +51,7 @@ public class UserRestController {
         return Response.success(emailService.sendLoginAuthMessage(email.getEmail()));
     }
 
+
     // 인증 메일 확인 하기
     @PostMapping("/check-auth-email")
     public Response<Boolean> checkAuthEmail(@RequestBody UserCodeRequest request) {
