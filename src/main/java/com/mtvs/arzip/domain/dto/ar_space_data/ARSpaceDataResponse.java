@@ -23,6 +23,7 @@ public class ARSpaceDataResponse {
     private String nickname;
     private String fbxFile;
     private List<ARObjectPlacementDataResponse> placements;
+    private int wallPaperNo;
 
     public ARSpaceDataResponse(ARSpaceData arSpaceData, List<ARObjectPlacementData> placements) {
         this.spaceNo = arSpaceData.getNo();
@@ -32,6 +33,7 @@ public class ARSpaceDataResponse {
         this.nickname = arSpaceData.getUser().getNickname();
         this.fbxFile = arSpaceData.getAiDrawingData().getFbxFile();
         this.placements = placements.stream().map(ARObjectPlacementDataResponse::new).collect(Collectors.toList());
+        this.wallPaperNo = arSpaceData.getAiDrawingData().getWallPaperNo();
     }
 
 }

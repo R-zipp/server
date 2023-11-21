@@ -5,6 +5,7 @@ import com.mtvs.arzip.domain.entity.ARSpaceData;
 import com.mtvs.arzip.domain.entity.User;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -19,7 +20,7 @@ public class ARSpaceDataRequest {
     private String title;
     private Long userNo;
     private Long aiDrawingDataNo;
-    private List<ARObjectPlacementDataRequest> placements;
+    private List<ARObjectPlacementDataRequest> placements = new ArrayList<>();
 
     public ARSpaceData toEntity(User user, AIDrawingData aiDrawingData) {
         return ARSpaceData.builder()

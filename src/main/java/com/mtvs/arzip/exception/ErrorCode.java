@@ -29,6 +29,9 @@ public enum ErrorCode {
     SPACE_DATA_SAVING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"공간 정보 저장 중 오류가 발생했습니다."),
     SPACE_DATA_LOADING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "공간 정보 조회 중 오류가 발생했습니다."),
     UNSHARED_SPACE(HttpStatus.BAD_GATEWAY, "공유되지 않은 공간입니다."),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "헤더의 값이 null 이거나 Bearer로 시작하지 않습니다."),
+    INVALID_ACCESSTOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
+    PLACEMENTS_DATA_NOT_FOUND(HttpStatus.NOT_FOUND, "배치된 오브젝트 정보가 넘어오지 않았습니다."),
 
 
     ;

@@ -13,6 +13,7 @@ import com.mtvs.arzip.jwt.TokenProvider;
 import com.mtvs.arzip.repository.RefreshTokenRepository;
 import com.mtvs.arzip.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
@@ -48,6 +50,9 @@ public class UserService {
     }
 
     public TokenDto login(UserLoginRequest userLoginRequest) {
+
+        log.info("🏠UserService login 시작");
+
         User user = userRepository.findByEmail(userLoginRequest.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUNDED));
 
@@ -64,6 +69,8 @@ public class UserService {
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
         TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
+
+        log.info("🏠생성된 AccessToken : {}",tokenDto.getAccessToken());
 
         RefreshToken refreshToken = RefreshToken.builder()
                 .key(authentication.getName())

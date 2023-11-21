@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 
 @RestController
@@ -29,10 +30,10 @@ public class ARSpaceDataController {
 
 
     @PostMapping("/save")
-    public Response<ObjectInfoResponse> saveSpace(@RequestBody ARSpaceDataRequest request, Principal principal) {
+    public Response<ObjectInfoResponse> saveSpace(@RequestBody ARSpaceDataRequest request, Principal principal, HttpServletRequest httpServletRequest) {
         Long savedSpaceNo;
 
-        savedSpaceNo = arSpaceDataService.saveSpaceData(request, principal);
+        savedSpaceNo = arSpaceDataService.saveSpaceData(request, principal, httpServletRequest);
 
         return Response.success(new ObjectInfoResponse("AR 공간 저장 완료", savedSpaceNo));
     }

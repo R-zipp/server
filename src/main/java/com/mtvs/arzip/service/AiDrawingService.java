@@ -47,7 +47,7 @@ public class AiDrawingService {
     private AiDrawingDataResponse sendDrawingDataToAI(AiDrawingDataResponse aiDrawingDataResponse, AiDrawingDataAIRequest request) throws IOException {
         log.info("🏠AI로 데이터 전송 서비스 코드 시작");
 
-        WebClient webClient = WebClient.builder().baseUrl("http://172.30.1.43:8000").build();
+        WebClient webClient = WebClient.builder().baseUrl("https://936a-221-163-19-218.ngrok-free.app").build();
 
         try {
             // AI 서버로부터 S3 URL을 받아옴

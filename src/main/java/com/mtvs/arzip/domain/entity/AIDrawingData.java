@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class AIDrawingData {
+public class AIDrawingData extends BaseEntity{
     // AI 3D 도면 정보
 
     @Id

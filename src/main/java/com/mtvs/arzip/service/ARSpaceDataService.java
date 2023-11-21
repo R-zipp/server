@@ -8,6 +8,11 @@ import com.mtvs.arzip.domain.entity.*;
 import com.mtvs.arzip.exception.AppException;
 import com.mtvs.arzip.exception.ErrorCode;
 import com.mtvs.arzip.repository.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -15,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +37,16 @@ public class ARSpaceDataService {
     private final ObjectInfoRepository objectInfoRepository;
 
     @Transactional
-    public Long saveSpaceData(ARSpaceDataRequest request, Principal principal) {
+    public Long saveSpaceData(ARSpaceDataRequest request, Principal principal, HttpServletRequest servletRequest) {
+
+        log.info("🏠공간 저장 시작");
+
+        String accessToken = servletRequest.getHeader("Authorization");
+        log.info("🏠언리얼에서 넘어온 accessToken: {}", accessToken);
+
+        if (accessToken == null || !accessToken.startsWith("Bearer ")) {
+            throw new AppException(ErrorCode.UNAUTHORIZED, ErrorCode.UNAUTHORIZED.getMessage());
+        }
 
         Long id = Long.parseLong(principal.getName());
         log.info("🏠principal.getName() : {}", principal.getName());
@@ -39,8 +54,20 @@ public class ARSpaceDataService {
         User user = userRepository.findById(id)
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUNDED));
 
-        AIDrawingData aiDrawingData = aiDrawingRepository.findById(request.getAiDrawingDataNo())
+        request.setUserNo(id);
+        log.info("🏠request.getUserNo() : {}", request.getUserNo());
+
+        AIDrawingData aiDrawingData = aiDrawingRepository.findFirstByOrderByCreatedAtDesc()
                 .orElseThrow(()-> new AppException(ErrorCode.AI_DRAWING_DATA_NOT_FOUND));
+        Long aiDrawingDataNo = aiDrawingData.getNo();
+
+        log.info("🏠aiDrawingDataNo() : {}", aiDrawingDataNo);
+
+
+        request.setAiDrawingDataNo(aiDrawingDataNo);
+
+        log.info("🏠request.getAiDrawingDataNo() : {}", request.getAiDrawingDataNo());
+
 
         // ARSpaceData 객체를 생성하여 저장
         ARSpaceData arSpaceData = request.toEntity(user, aiDrawingData);
@@ -55,8 +82,19 @@ public class ARSpaceDataService {
 
         log.info("🏠arSpaceData : {}",arSpaceData.getNo());
 
+        if (request.getPlacements() == null || request.getPlacements().isEmpty()) {
+            throw new AppException(ErrorCode.PLACEMENTS_DATA_NOT_FOUND, ErrorCode.PLACEMENTS_DATA_NOT_FOUND.getMessage());
+        }
+
         // ARObjectPlacementData 객체들을 생성하여 저장
         for (ARObjectPlacementDataRequest placementDataRequest : request.getPlacements()) {
+
+            log.info("🏠placementDataRequest: {}", placementDataRequest);
+            if(placementDataRequest == null) {
+                log.warn("🏠placementDataRequest == null");
+                continue;
+            }
+            log.info("🏠placementDataRequest.getObjectInfoNo() : {}", placementDataRequest.getObjectInfoNo());
 
             ObjectInfo objectInfo = objectInfoRepository.findById(placementDataRequest.getObjectInfoNo())
                     .orElseThrow(() -> new AppException(ErrorCode.OBJECT_INFO_NOT_FOUND));
@@ -68,6 +106,8 @@ public class ARSpaceDataService {
         }
 
         log.info("🏠request.getPlacements().toString() : {}", request.getPlacements().toString());
+
+        log.info("🏠공간 저장 완료");
 
         return arSpaceData.getNo();
     }
