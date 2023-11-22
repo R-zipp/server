@@ -112,36 +112,43 @@ public class ARSpaceDataService {
         return arSpaceData.getNo();
     }
 
-    @Transactional
     public ARSpaceDataResponse loadSpaceData(Long spaceNo, Principal principal) {
 
         Long id = Long.parseLong(principal.getName());
 
+        ARSpaceData arSpaceData = arSpaceDataRepository.findByNo(spaceNo)
+                .orElseThrow(() -> new AppException(ErrorCode.SPACE_NOT_FOUND));
 
-        ARSpaceData arSpaceData = arSpaceDataRepository.findById(spaceNo)
-                .orElseThrow(()-> new AppException(ErrorCode.SPACE_NOT_FOUND));
+        // ARSpaceData 객체가 올바르게 전달되었는지 확인하는 로그
+        log.info("Loaded ARSpaceData: {}", arSpaceData);
 
-        // 프로젝트를 생성한 사용자와 조회하는 사용자가 일치하는 경우는 조회수 증가하지 않음
-        // 프로젝트가 공유되지 않았을 경우, 생성한 사용자만 조회 가능
-        if (!arSpaceData.getUser().getNo().equals(id)) {
-            // 프로젝트가 공유된 경우에만 조회할 수 있음
-            if (!arSpaceData.isShared()) {
-                throw new AppException(ErrorCode.UNSHARED_SPACE);
-            }
-            arSpaceData.addViews();
-        } else {
-            // 프로젝트를 생성한 사용자가 조회하는 경우, 조회수가 증가하지 않음
-            if (!arSpaceData.isShared()) {
-                return new ARSpaceDataResponse(arSpaceData, new ArrayList<>());
-            }
-        }
+//        // 프로젝트를 생성한 사용자와 조회하는 사용자가 일치하는 경우는 조회수 증가하지 않음
+//        // 프로젝트가 공유되지 않았을 경우, 생성한 사용자만 조회 가능
+//        if (!arSpaceData.getUser().getNo().equals(id)) {
+//            // 프로젝트가 공유된 경우에만 조회할 수 있음
+//            if (!arSpaceData.isShared()) {
+//                throw new AppException(ErrorCode.UNSHARED_SPACE);
+//            }
+//            arSpaceData.addViews();
+//        } else {
+//            // 프로젝트를 생성한 사용자가 조회하는 경우, 조회수가 증가하지 않음
+//            if (!arSpaceData.isShared()) {
+//                return new ARSpaceDataResponse(arSpaceData, new ArrayList<>());
+//            }
+//        }
 
         // ARSpaceData에 연결된 ARObjectPlacementData 객체들을 조회
         List<ARObjectPlacementData> placements = arObjectPlacementDataRepository.findByArSpaceData(arSpaceData);
 
+        // ARObjectPlacementData 객체들의 목록을 로그로 출력하여 확인
+        log.info("ARObjectPlacementData list: {}", placements);
+
         // ARSpaceDataResponse 객체를 생성하여 반환
         return new ARSpaceDataResponse(arSpaceData, placements);
     }
+
+
+
 
 
     public Page<ARSpaceListResponse> loadMyList(Pageable pageable) {
