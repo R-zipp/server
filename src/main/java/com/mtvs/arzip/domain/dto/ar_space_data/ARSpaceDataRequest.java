@@ -1,5 +1,7 @@
 package com.mtvs.arzip.domain.dto.ar_space_data;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mtvs.arzip.domain.entity.AIDrawingData;
 import com.mtvs.arzip.domain.entity.ARSpaceData;
 import com.mtvs.arzip.domain.entity.User;
@@ -21,6 +23,15 @@ public class ARSpaceDataRequest {
     private Long userNo;
     private Long aiDrawingDataNo;
     private List<ARObjectPlacementDataRequest> placements = new ArrayList<>();
+
+    @JsonCreator
+    public ARSpaceDataRequest(@JsonProperty("views") Integer views,
+                              @JsonProperty("title") String title,
+                              @JsonProperty("placements") List<ARObjectPlacementDataRequest> placements) {
+        this.views = views;
+        this.title = title;
+        this.placements = placements;
+    }
 
     public ARSpaceData toEntity(User user, AIDrawingData aiDrawingData) {
         return ARSpaceData.builder()
