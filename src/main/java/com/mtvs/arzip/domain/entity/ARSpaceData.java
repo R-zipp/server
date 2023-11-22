@@ -4,6 +4,8 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -34,12 +36,28 @@ public class ARSpaceData extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     private AIDrawingData aiDrawingData;  // AR 공간에 사용된 도면 No
 
+    @OneToMany(mappedBy = "arSpaceData", fetch = FetchType.EAGER)
+    private List<ARObjectPlacementData> placements = new ArrayList<>();
+
     public void share() {
         this.isShared = true;
     }
 
     public void addViews() {
         this.views++;
+    }
+
+    // toString 메서드를 오버라이드
+    @Override
+    public String toString() {
+        return "ARSpaceData{" +
+                "no=" + no +
+                ", views=" + views +
+                ", title='" + title + '\'' +
+                ", isShared=" + isShared +
+                ", user=" + user +
+                ", aiDrawingData=" + aiDrawingData +
+                '}';
     }
 
 

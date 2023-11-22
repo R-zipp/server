@@ -38,8 +38,8 @@ public class ARSpaceDataController {
         return Response.success(new ObjectInfoResponse("AR 공간 저장 완료", savedSpaceNo));
     }
 
-    @GetMapping("/load/{spaceNo}")
-    public Response<ARSpaceDataResponse> loadSpace(@PathVariable Long spaceNo, Principal principal) {
+    @PostMapping("/load")
+    public Response<ARSpaceDataResponse> loadSpace(@RequestParam Long spaceNo, Principal principal) {
         ARSpaceDataResponse response;
 
         Long id = Long.parseLong(principal.getName());
