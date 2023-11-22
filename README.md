@@ -19,7 +19,7 @@
 
 <br/>
 
-## 3. BackEnd 구현 기능
+## 3. 💡BackEnd 구현 기능
 ### User
 - Spring Security와 JWT 기반 회원가입/로그인 구현
 - 회원 가입 시 이메일 인증 진행(인증 번호 redis 관리)
