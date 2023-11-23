@@ -63,11 +63,9 @@ public class ARSpaceDataService {
 
         log.info("🏠aiDrawingDataNo() : {}", aiDrawingDataNo);
 
-
         request.setAiDrawingDataNo(aiDrawingDataNo);
 
         log.info("🏠request.getAiDrawingDataNo() : {}", request.getAiDrawingDataNo());
-
 
         // ARSpaceData 객체를 생성하여 저장
         ARSpaceData arSpaceData = request.toEntity(user, aiDrawingData);
@@ -147,13 +145,16 @@ public class ARSpaceDataService {
         return new ARSpaceDataResponse(arSpaceData, placements);
     }
 
+    public Page<ARSpaceListResponse> loadMyList(Principal principal, Pageable pageable) {
 
+        Long id = Long.parseLong(principal.getName());
+        log.info("🏠principal.getName() : {}", principal.getName());
 
+        User user = userRepository.findById(id)
+                .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUNDED));
 
+        Page<ARSpaceData> arSpaceDatas = arSpaceDataRepository.findByUserNo(id, pageable);
 
-    public Page<ARSpaceListResponse> loadMyList(Pageable pageable) {
-
-        Page<ARSpaceData> arSpaceDatas = arSpaceDataRepository.findAll(pageable);
         Page<ARSpaceListResponse> spaceListResponses = ARSpaceListResponse.listResponses(arSpaceDatas);
 
         return spaceListResponses;

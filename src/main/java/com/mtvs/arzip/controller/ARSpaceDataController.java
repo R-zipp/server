@@ -55,9 +55,9 @@ public class ARSpaceDataController {
         return Response.success("공간 공유 완료");
     }
 
-    @GetMapping("/list")
-    public Response<Page<ARSpaceListResponse>> list(@PageableDefault(sort = "createdAt", size = 20, direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<ARSpaceListResponse> listResponses = arSpaceDataService.loadMyList(pageable);
+    @PostMapping("/list")
+    public Response<Page<ARSpaceListResponse>> list(@PageableDefault(sort = "createdAt", size = 20, direction = Sort.Direction.DESC) Pageable pageable, Principal principal) {
+        Page<ARSpaceListResponse> listResponses = arSpaceDataService.loadMyList(principal, pageable);
         return Response.success(listResponses);
     }
 
