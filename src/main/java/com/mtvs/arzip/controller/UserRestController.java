@@ -35,7 +35,6 @@ public class UserRestController {
     @PostMapping("/login")
     public Response<TokenDto> login(@RequestBody @Valid UserLoginRequest userLoginRequest) {
         System.out.println("🏠로그인 한 email : " + userLoginRequest.getEmail());
-        System.out.println("🏠로그인 한 password : " + userLoginRequest.getPassword());
         return Response.success(userService.login(userLoginRequest));
     }
 

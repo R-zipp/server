@@ -47,7 +47,7 @@ public class AiDrawingService {
     private AiDrawingDataResponse sendDrawingDataToAI(AiDrawingDataResponse aiDrawingDataResponse, AiDrawingDataAIRequest request) throws IOException {
         log.info("🏠AI로 데이터 전송 서비스 코드 시작");
 
-        WebClient webClient = WebClient.builder().baseUrl("https://936a-221-163-19-218.ngrok-free.app").build();
+        WebClient webClient = WebClient.builder().baseUrl("http://192.168.0.39:8000").build();
 
         try {
             // AI 서버로부터 S3 URL을 받아옴
@@ -124,7 +124,6 @@ public class AiDrawingService {
 
         // request를 엔티티로 변환
         AIDrawingData aiDrawingData = toEntity.apply(stream, request);
-        log.info("🏠request를 entity로 변환한 값 : {}", aiDrawingData.getNo());
 
         aiDrawingRepository.save(aiDrawingData);
         log.info("🏠aiDrawingData: {}", aiDrawingData);
@@ -146,7 +145,6 @@ public class AiDrawingService {
         } else if (request instanceof AiDrawingDataFloorPlanRequest) {
             aiDrawingDataAIRequest.setDrawingType(((AiDrawingDataFloorPlanRequest) request).getDrawingType());
         }
-
 
         log.info("🏠AI로 전송 시작");
         AiDrawingDataResponse result = sendDrawingDataToAI(aiDrawingDataResponse, aiDrawingDataAIRequest);

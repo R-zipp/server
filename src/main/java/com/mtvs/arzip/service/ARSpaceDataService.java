@@ -42,7 +42,6 @@ public class ARSpaceDataService {
         log.info("🏠공간 저장 시작");
 
         String accessToken = servletRequest.getHeader("Authorization");
-        log.info("🏠언리얼에서 넘어온 accessToken: {}", accessToken);
 
         if (accessToken == null || !accessToken.startsWith("Bearer ")) {
             throw new AppException(ErrorCode.UNAUTHORIZED, ErrorCode.UNAUTHORIZED.getMessage());
