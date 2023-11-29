@@ -29,8 +29,6 @@ public class SecurityConfig {
                 .cors().and()
                 .authorizeRequests()
                 .antMatchers("/users/join", "/users/login").permitAll()
-                .antMatchers("/ai/drawing/**").authenticated()
-                .antMatchers("/space/**").authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
