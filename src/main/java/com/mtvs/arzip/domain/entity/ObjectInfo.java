@@ -28,6 +28,4 @@ public class ObjectInfo {
         this.objectName = objectName;
         this.objectType = objectType;
     }
-
-
 }

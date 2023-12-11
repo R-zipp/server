@@ -1,8 +1,7 @@
 package com.mtvs.arzip.domain.dto.ai_drawing_data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter

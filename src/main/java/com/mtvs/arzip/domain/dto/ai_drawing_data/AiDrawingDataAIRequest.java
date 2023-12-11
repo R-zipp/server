@@ -24,6 +24,4 @@ public class AiDrawingDataAIRequest {
                 .wallPaperNo(dto.wallPaperNo)
                 .build();
     }
-
-
 }

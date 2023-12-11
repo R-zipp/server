@@ -2,10 +2,7 @@ package com.mtvs.arzip.domain.dto.user;
 
 import com.mtvs.arzip.domain.entity.User;
 import com.mtvs.arzip.domain.enum_class.UserRole;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

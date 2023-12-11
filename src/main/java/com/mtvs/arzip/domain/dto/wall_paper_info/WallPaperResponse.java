@@ -1,7 +1,6 @@
 package com.mtvs.arzip.domain.dto.wall_paper_info;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
 @AllArgsConstructor

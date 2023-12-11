@@ -1,7 +1,6 @@
 package com.mtvs.arzip.domain.dto.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
 @AllArgsConstructor

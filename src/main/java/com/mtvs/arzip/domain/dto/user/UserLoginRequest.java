@@ -2,9 +2,7 @@ package com.mtvs.arzip.domain.dto.user;
 
 import com.mtvs.arzip.domain.entity.User;
 import com.mtvs.arzip.domain.enum_class.UserRole;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

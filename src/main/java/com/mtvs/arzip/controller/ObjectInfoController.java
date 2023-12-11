@@ -31,5 +31,4 @@ public class ObjectInfoController {
         return Response.success(new ObjectInfoResponse("Object 내용 저장 완료", savedObjectInfoNo));
     }
 
-
 }

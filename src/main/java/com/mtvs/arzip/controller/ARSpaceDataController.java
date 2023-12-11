@@ -4,9 +4,6 @@ import com.mtvs.arzip.domain.dto.ar_space_data.ARSpaceDataRequest;
 import com.mtvs.arzip.domain.dto.ar_space_data.ARSpaceDataResponse;
 import com.mtvs.arzip.domain.dto.ar_space_data.ARSpaceListResponse;
 import com.mtvs.arzip.domain.dto.object_info.ObjectInfoResponse;
-import com.mtvs.arzip.domain.entity.User;
-import com.mtvs.arzip.exception.AppException;
-import com.mtvs.arzip.exception.ErrorCode;
 import com.mtvs.arzip.exception.Response;
 import com.mtvs.arzip.service.ARSpaceDataService;
 import io.swagger.annotations.Api;
@@ -27,7 +24,6 @@ import java.security.Principal;
 public class ARSpaceDataController {
 
     private final ARSpaceDataService arSpaceDataService;
-
 
     @PostMapping("/save")
     public Response<ObjectInfoResponse> saveSpace(@RequestBody ARSpaceDataRequest request, Principal principal, HttpServletRequest httpServletRequest) {

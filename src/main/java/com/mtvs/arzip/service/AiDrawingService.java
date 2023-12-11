@@ -47,7 +47,7 @@ public class AiDrawingService {
     private AiDrawingDataResponse sendDrawingDataToAI(AiDrawingDataResponse aiDrawingDataResponse, AiDrawingDataAIRequest request) throws IOException {
         log.info("🏠AI로 데이터 전송 서비스 코드 시작");
 
-        WebClient webClient = WebClient.builder().baseUrl("http://192.168.0.39:8000").build();
+        WebClient webClient = WebClient.builder().baseUrl("http://192.168.0.10:8000").build();
 
         try {
             // AI 서버로부터 S3 URL을 받아옴
@@ -167,6 +167,5 @@ public class AiDrawingService {
             throw new AppException(ErrorCode.JSON_DATA_PARSING_ERROR);
         }
     }
-
 
 }

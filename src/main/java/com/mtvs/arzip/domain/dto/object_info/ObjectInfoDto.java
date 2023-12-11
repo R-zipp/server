@@ -18,14 +18,12 @@ public class ObjectInfoDto {
     @Enumerated(EnumType.STRING)
     private ObjectType objectType;
     private String objectName;
-//    private String objectImage;
 
     public static ObjectInfoDto of(ObjectInfo objectInfo) {
         return ObjectInfoDto.builder()
                 .no(objectInfo.getNo())
                 .objectType(objectInfo.getObjectType())
                 .objectName(objectInfo.getObjectName())
-//                .objectImage(objectInfo.getObjectImage())
                 .build();
     }
 

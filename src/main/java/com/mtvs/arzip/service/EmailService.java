@@ -1,22 +1,16 @@
 package com.mtvs.arzip.service;
 
-import com.mtvs.arzip.exception.AppException;
-import com.mtvs.arzip.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import javax.mail.Message;
-import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.io.File;
 import java.time.Duration;
 import java.util.Random;
 
@@ -52,7 +46,7 @@ public class EmailService {
             }
         }
 
-        log.info("인증 키 : {}", key.toString());
+        log.info("인증 키 : {}", key);
         log.info("인증 키 객체 주소 : {}", System.identityHashCode(key));
 
         return key.toString();
@@ -63,14 +57,14 @@ public class EmailService {
         MimeMessage message = javaMailSender.createMimeMessage();
 
         message.addRecipients(Message.RecipientType.TO, to);
-        message.setSubject("[프로젝트 명] 본인 인증 메일");
+        message.setSubject("[R-집] 본인 인증 메일");
 
         String msgg = "";
 
         msgg += "<div style='margin:100px'>";
         msgg += "<h1>이메일 인증번호 안내</h1>";
         msgg += "<br>";
-        msgg += "<p>본 메일은 프로젝트 명 사이트의 회원가입을 위한 이메일 인증입니다.</p>";
+        msgg += "<p>본 메일은 R-집 사이트의 회원가입을 위한 이메일 인증입니다.</p>";
         msgg += "<p>아래의 [이메일 인증번호]를 입력하여 본인확인을 해주시기 바랍니다.</p>";
         msgg += "<br>";
         msgg += "<p>감사합니다.</p>";
@@ -81,7 +75,7 @@ public class EmailService {
         msgg += ePw + "</strong><div><br />";
         msgg += "</div>";
         message.setText(msgg, "utf-8", "html");
-        message.setFrom(new InternetAddress("crimecapturetv@gmail.com", "프로젝트 명"));
+        message.setFrom(new InternetAddress("crimecapturetv@gmail.com", "R-집"));
 
         return message;
     }
@@ -125,6 +119,5 @@ public class EmailService {
     public void deleteData(String key) {
         redisTemplate.delete(key);
     }
-
 
 }

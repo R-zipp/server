@@ -32,10 +32,6 @@ public class AIDrawingData extends BaseEntity{
 
     private int wallPaperNo;  // 벽지 번호
 
-//     @JoinColumn(name = "user_no")
-//     @ManyToOne(fetch = FetchType.LAZY)
-//     private User user;
-
     // AI fbx 파일 url 추가
     public void updateFbxFile(String fbxFile) {
         this.fbxFile = fbxFile;

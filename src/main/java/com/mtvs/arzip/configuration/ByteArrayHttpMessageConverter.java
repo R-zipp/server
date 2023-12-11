@@ -14,7 +14,6 @@ import java.util.List;
 @Configuration
 public class ByteArrayHttpMessageConverter extends AbstractHttpMessageConverter {
 
-
     @Override
     public List<MediaType> getSupportedMediaTypes(Class clazz) {
         return super.getSupportedMediaTypes(clazz);

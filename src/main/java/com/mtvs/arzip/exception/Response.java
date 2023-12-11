@@ -1,7 +1,6 @@
 package com.mtvs.arzip.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
 @AllArgsConstructor
@@ -17,6 +16,5 @@ public class Response<T> {
     public static<T> Response<T> success(T result){
         return new Response("SUCCESS", result);
     }
-
 
 }

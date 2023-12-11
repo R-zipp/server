@@ -1,9 +1,7 @@
 package com.mtvs.arzip.domain.dto.ar_space_data;
 
-import com.mtvs.arzip.domain.entity.AIDrawingData;
 import com.mtvs.arzip.domain.entity.ARObjectPlacementData;
 import com.mtvs.arzip.domain.entity.ARSpaceData;
-import com.mtvs.arzip.domain.entity.User;
 import lombok.*;
 
 import java.util.List;

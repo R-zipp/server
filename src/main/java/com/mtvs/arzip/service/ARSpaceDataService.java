@@ -8,11 +8,6 @@ import com.mtvs.arzip.domain.entity.*;
 import com.mtvs.arzip.exception.AppException;
 import com.mtvs.arzip.exception.ErrorCode;
 import com.mtvs.arzip.repository.*;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -119,20 +114,20 @@ public class ARSpaceDataService {
         // ARSpaceData 객체가 올바르게 전달되었는지 확인하는 로그
         log.info("Loaded ARSpaceData: {}", arSpaceData);
 
-//        // 프로젝트를 생성한 사용자와 조회하는 사용자가 일치하는 경우는 조회수 증가하지 않음
-//        // 프로젝트가 공유되지 않았을 경우, 생성한 사용자만 조회 가능
-//        if (!arSpaceData.getUser().getNo().equals(id)) {
-//            // 프로젝트가 공유된 경우에만 조회할 수 있음
-//            if (!arSpaceData.isShared()) {
-//                throw new AppException(ErrorCode.UNSHARED_SPACE);
-//            }
-//            arSpaceData.addViews();
-//        } else {
-//            // 프로젝트를 생성한 사용자가 조회하는 경우, 조회수가 증가하지 않음
-//            if (!arSpaceData.isShared()) {
-//                return new ARSpaceDataResponse(arSpaceData, new ArrayList<>());
-//            }
-//        }
+        // 프로젝트를 생성한 사용자와 조회하는 사용자가 일치하는 경우는 조회수 증가하지 않음
+        // 프로젝트가 공유되지 않았을 경우, 생성한 사용자만 조회 가능
+        if (!arSpaceData.getUser().getNo().equals(id)) {
+            // 프로젝트가 공유된 경우에만 조회할 수 있음
+            if (!arSpaceData.isShared()) {
+                throw new AppException(ErrorCode.UNSHARED_SPACE);
+            }
+            arSpaceData.addViews();
+        } else {
+            // 프로젝트를 생성한 사용자가 조회하는 경우, 조회수가 증가하지 않음
+            if (!arSpaceData.isShared()) {
+                return new ARSpaceDataResponse(arSpaceData, new ArrayList<>());
+            }
+        }
 
         // ARSpaceData에 연결된 ARObjectPlacementData 객체들을 조회
         List<ARObjectPlacementData> placements = arObjectPlacementDataRepository.findByArSpaceData(arSpaceData);
@@ -167,7 +162,5 @@ public class ARSpaceDataService {
 
         arSpaceData.share();
     }
-
-
 
 }
