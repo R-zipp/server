@@ -3,6 +3,8 @@
 ## 1. 🏠서비스 소개
 간단하게 도면을 업로드 하여 <strong>3D 그래픽으로 구현</strong>해 원하는 가구를 원하는 위치에 가상으로 배치할 수 있는 서비스를 제공합니다.
 
+<a href="https://descriptive-soda-58f.notion.site/8559739c86944de7b6b18124e52a4000">팀 노션페이지</a>
+<br/>
 <br/>
 
 ## 2. 📝주요 기능 소개
@@ -54,6 +56,17 @@
 ### Servers
 ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
 
+<br/>
 
+## 📜Git Convention
+| **Convention**  | **내용**                                                         |
+|-----------------|----------------------------------------------------------------|
+| **Feat**        | 새로운 기능 추가                                                      |
+| **BugFix**         | 버그 수정                                                          |
+| **Test**        | 테스트 코드, 리펙토링 테스트 코드 추가, Production Code(실제로 사용하는 코드) 변경 없음     |
+| **Rename**      | 파일 혹은 폴더명을 수정하거나 옮기는 작업만인 경우                                   |
+| **Remove**      | 파일을 삭제하는 작업만 수행한 경우                                            |
+| **Refactor** | 프로덕션 코드 리팩토링                                                   |
+| **Chore** | 빌드 관련 수정, 패키지 관리자,yml, 구성 등 업데이트                          |
 
 
